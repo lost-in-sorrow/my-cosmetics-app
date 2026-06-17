@@ -1,0 +1,53 @@
+/* Настройки для всей страницы */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #fcf8f8; /* Очень нежный, почти белый розовый фон */
+    color: #333;
+    margin: 0;
+    padding: 20px;
+}
+
+/* Стили для главного заголовка */
+h1 {
+    text-align: center;
+    color: #d46a7f; /* Красивый приглушенный розовый цвет */
+    margin-bottom: 30px;
+}
+
+/* Коробка-каталог, в которой лежат все карточки */
+#catalog {
+    display: flex;       /* Включаем режим Flexbox, чтобы карточки встали в ряд */
+    flex-wrap: wrap;     /* Если карточки не влезают в экран, они перенесутся на новую строку */
+    justify-content: center; /* Центрируем карточки на странице */
+    gap: 20px;           /* Отступы между карточками */
+}
+
+/* Стили для самой карточки косметики */
+.cosmetic-card {
+    background-color: #ffffff;
+    border: 1px solid #f0dbdb; /* Нежная розовая рамка */
+    border-radius: 12px;       /* Скругляем углы карточки */
+    padding: 20px;
+    width: 280px;              /* Фиксированная ширина карточки */
+    box-shadow: 0 4px 10px rgba(212, 106, 127, 0.1); /* Легкая розовая тень */
+    transition: transform 0.2s; /* Плавность при наведении */
+}
+
+/* Эффект при наведении мышки на карточку */
+.cosmetic-card:hover {
+    transform: translateY(-5px); /* Карточка изящно приподнимается */
+}
+
+/* Стили для текста внутри карточки */
+.cosmetic-card h3 {
+    margin-top: 0;
+    color: #333;
+    border-bottom: 2px solid #fbe5e5; /* Подчеркивание под брендом */
+    padding-bottom: 8px;
+}
+
+.cosmetic-card p {
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 8px 0;
+}

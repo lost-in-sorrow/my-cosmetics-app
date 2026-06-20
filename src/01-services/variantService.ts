@@ -1,5 +1,5 @@
 import { supabase } from '../supabaseClient';
-import { Database } from '../types/supabase';
+import { Database } from '../04-types/supabase';
 
 // Вытаскиваем авто-тип для добавления вариации из нашей карты базы данных
 type VariantInsert = Database['public']['Tables']['product_variants']['Insert'];

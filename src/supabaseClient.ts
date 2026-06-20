@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import * as dotenv from 'dotenv';
 // Импортируем карту нашей базы данных из сгенерированного файла
-import { Database } from './types/supabase';
+import { Database } from './04-types/supabase';
 
 dotenv.config();
 

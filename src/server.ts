@@ -1,6 +1,6 @@
 import express from 'express';
-import { brandService } from './services/brandService';
-import { productService } from './services/productService';
+import { brandService } from './01-services/brandService';
+import { productService } from './01-services/productService';
 
 const app = express();
 app.use(express.json()); // Чтобы сервер понимал JSON в запросах

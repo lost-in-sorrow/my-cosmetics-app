@@ -1,5 +1,5 @@
 import { supabase } from '../supabaseClient';
-import { Database } from '../types/supabase';
+import { Database } from '../04-types/supabase';
 
 // Вытаскиваем готовый тип для создания продукта, который сгенерировал Supabase
 type ProductInsert = Database['public']['Tables']['products']['Insert'];

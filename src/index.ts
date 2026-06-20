@@ -1,6 +1,6 @@
-import { brandService } from './services/brandService';
-import { productService } from './services/productService';
-import { reviewService } from './services/reviewService';
+import { brandService } from './01-services/brandService';
+import { productService } from './01-services/productService';
+import { reviewService } from './01-services/reviewService';
 import { supabase } from './supabaseClient'; // Для быстрого чтения категорий
 
 async function main() {
@@ -23,7 +23,7 @@ async function main() {
     // Читаем вариации
     const { data: variants } = await supabase.from('product_variants').select('*');
     console.log(`📊 Всего вариаций с ценами: ${variants?.length || 0}`);
-    
+
     // Читаем отзывы
     const { data: reviews } = await supabase.from('reviews').select('*');
     console.log(`📊 Всего отзывов в базе: ${reviews?.length || 0}`);

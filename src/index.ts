@@ -1,20 +1,39 @@
-// src/index.ts
+import { brandService } from './services/brandService';
+import { productService } from './services/productService';
+import { reviewService } from './services/reviewService';
+import { supabase } from './supabaseClient'; // Для быстрого чтения категорий
 
-// Создаем строгий тип для статуса нашей косметики (один в один как в Supabase!)
-type ProductStatus = 'new' | 'in_use' | 'finished' | 'expired';
+async function main() {
+  try {
+    console.log("🚀 Бэкенд-сервер успешно запущен в режиме мониторинга!");
+    console.log("-----------------------------------------------------");
 
-interface BeautyProduct {
-    id: number;
-    name: string;
-    status: ProductStatus;
-    volume: number;
+    // Читаем бренды
+    const brands = await brandService.getAll();
+    console.log(`📊 Всего брендов в базе: ${brands?.length || 0}`);
+
+    // Читаем категории
+    const { data: categories } = await supabase.from('categories').select('*');
+    console.log(`📊 Всего категорий в базе: ${categories?.length || 0}`);
+
+    // Читаем товары
+    const products = await productService.getAll();
+    console.log(`📊 Всего товаров в базе: ${products?.length || 0}`);
+
+    // Читаем вариации
+    const { data: variants } = await supabase.from('product_variants').select('*');
+    console.log(`📊 Всего вариаций с ценами: ${variants?.length || 0}`);
+    
+    // Читаем отзывы
+    const { data: reviews } = await supabase.from('reviews').select('*');
+    console.log(`📊 Всего отзывов в базе: ${reviews?.length || 0}`);
+    
+    console.log("-----------------------------------------------------");
+    console.log("✅ Все сервисы бэкенда проверены, база данных доступна!");
+
+  } catch (error: any) {
+    console.error("💥 Произошла ошибка при диагностике базы:", error.message);
+  }
 }
 
-const myLipstick: BeautyProduct = {
-    id: 1,
-    name: "Color Drops",
-    status: 'new', // Попробуй изменить на 'wow' — редактор сразу начнет ругаться!
-    volume: 15
-};
-
-console.log(`Ура! Наш продукт ${myLipstick.name} успешно запущен на TypeScript!`);
+main();

@@ -1,4 +1,4 @@
-import { supabase } from '../supabaseClient';
+import { supabase } from '../05-config/supabaseClient';
 import { Database } from '../04-types/supabase';
 
 type ReviewInsert = Database['public']['Tables']['reviews']['Insert'];

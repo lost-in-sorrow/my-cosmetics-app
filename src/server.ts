@@ -1,34 +1,21 @@
 import express from 'express';
-import { brandService } from './01-services/brandService';
-import { productService } from './01-services/productService';
+import brandRoutes from './03-routes/brandRoutes';
+import categoryRoutes from './03-routes/categoryRoutes';
+import productRoutes from './03-routes/productRoutes';
+import { errorHandler } from './06-middleware/errorHandler';
+// По аналогии потом подключишь productRoutes
 
 const app = express();
-app.use(express.json()); // Чтобы сервер понимал JSON в запросах
+app.use(express.json());
 
-// --- Маршруты (API Endpoints) ---
+// Подключаем наши модули роутов
+app.use('/api/brands', brandRoutes);
+app.use('/api/categories', categoryRoutes);
+app.use('/api/products', productRoutes);
 
-// Получить список всех брендов
-app.get('/api/brands', async (req, res) => {
-  const brands = await brandService.getAll();
-  res.json(brands);
-});
+app.use(errorHandler);
 
-// Получить все товары
-app.get('/api/products', async (req, res) => {
-  const products = await productService.getAll();
-  res.json(products);
-});
-
-// Добавить товар (POST запрос)
-app.post('/api/products', async (req, res) => {
-  try {
-    const newProduct = await productService.create(req.body);
-    res.status(201).json(newProduct);
-  } catch (err: any) {
-    res.status(400).json({ error: err.message });
-  }
-});
-
-app.listen(3000, () => {
-  console.log('🚀 API сервер запущен на http://localhost:3000');
+const PORT = 3000;
+app.listen(PORT, () => {
+  console.log(`🚀 API сервер запущен на http://localhost:${PORT}`);
 });

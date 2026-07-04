@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cosmetics App</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <a class="brand-lockup" href="/" data-link>
+          <span class="brand-mark">C</span>
+          <span>
+            <strong>Cosmetics</strong>
+            <small>inventory</small>
+          </span>
+        </a>
+
+        <nav class="nav" aria-label="Main navigation">
+          <a href="/brands" data-link>Brands</a>
+          <a href="/products" data-link>Products</a>
+          <a href="/categories" data-link>Categories</a>
+          <a href="/variants" data-link>Variants</a>
+          <a href="/api-docs" target="_blank" rel="noreferrer">OpenAPI</a>
+        </nav>
+
+        <div class="status-card">
+          <span class="status-dot" id="statusDot"></span>
+          <div>
+            <strong id="statusTitle">Ready</strong>
+            <p id="statusText">Interface loaded</p>
+          </div>
+        </div>
+      </aside>
+
+      <main class="workspace">
+        <div id="app"></div>
+      </main>
+    </div>
+
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

@@ -44,6 +44,7 @@
   --font-weight-extra-bold: 800;
   --font-weight-black: 900;
   --line-height-title: 0.98;
+  --line-height-admin-title: 1.15;
   --letter-spacing-none: 0;
   --letter-spacing-kicker: 0.08em;
 
@@ -89,8 +90,14 @@
   --size-letter-button-min-height: 34px;
   --size-product-image-height: 220px;
   --size-page-max-width: 1320px;
+  --size-admin-page-max-width: 1680px;
   --size-app-min-width: 320px;
   --size-sidebar-width: 264px;
+  --size-admin-control-min-height: 34px;
+  --size-admin-id-field: 120px;
+  --size-admin-edit-min: 520px;
+  --size-admin-actions-width: 170px;
+  --size-catalog-arrow-width: 18px;
   --size-brand-search-min: 260px;
   --size-brand-search-max: 360px;
   --size-brand-row-min-height: 38px;

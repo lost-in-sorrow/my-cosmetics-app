@@ -60,22 +60,24 @@ function renderAlphabet(letters) {
   `;
 }
 
-function renderGroups(groups, { showId = false } = {}) {
+function renderGroups(groups, { showId = false, dense = false, showLetters = true } = {}) {
   const letters = sortedGroupKeys(groups);
   if (!letters.length) return emptyState('Брендов пока нет');
+  const directoryClass = dense ? 'brand-directory dense' : 'brand-directory';
+  const rowClass = dense ? 'brand-row compact dense' : 'brand-row compact';
 
   return `
-    <div class="brand-directory">
+    <div class="${directoryClass}">
       ${letters
         .map(
           (letter) => `
             <section class="brand-group" id="letter-${encodeURIComponent(letter)}">
-              <h2 class="brand-letter">${escapeHtml(letter)}</h2>
+              ${showLetters ? `<h2 class="brand-letter">${escapeHtml(letter)}</h2>` : ''}
               <div class="brand-group-list">
                 ${groups[letter]
                   .map(
                     (brand) => `
-                      <a class="brand-row compact" href="/brands/${brand.id}" data-link data-brand-id="${brand.id}">
+                      <a class="${rowClass}" href="/brands/${brand.id}" data-link data-brand-id="${brand.id}">
                         <strong>${escapeHtml(brand.name)}</strong>
                         ${showId ? `<span class="subtle">ID ${brand.id}</span>` : ''}
                       </a>
@@ -84,6 +86,35 @@ function renderGroups(groups, { showId = false } = {}) {
                   .join('')}
               </div>
             </section>
+          `,
+        )
+        .join('')}
+    </div>
+  `;
+}
+
+function renderAdminBrandTable(brands) {
+  const items = sortedBrands(brands);
+  if (!items.length) return emptyState('Брендов пока нет');
+
+  return `
+    <div class="admin-brand-table">
+      <div class="admin-brand-table-row header">
+        <span>ID</span>
+        <span>Название</span>
+        <span>Действия</span>
+      </div>
+      ${items
+        .map(
+          (brand) => `
+            <div class="admin-brand-table-row">
+              <span class="mono">${brand.id}</span>
+              <strong>${escapeHtml(brand.name)}</strong>
+              <span class="admin-table-actions">
+                <button class="button compact" data-action="brand-edit-row" data-brand-id="${brand.id}" type="button">Изменить</button>
+                <button class="button compact danger" data-action="brand-delete-row" data-brand-id="${brand.id}" type="button">Удалить</button>
+              </span>
+            </div>
           `,
         )
         .join('')}
@@ -132,7 +163,7 @@ function bindAlphabet() {
   });
 }
 
-function bindBrandCrud(load) {
+function bindBrandCrud(load, brands = []) {
   document.querySelector('[data-form="brand-create"]').addEventListener('submit', async (event) => {
     event.preventDefault();
     const fields = formToObject(event.currentTarget);
@@ -158,6 +189,24 @@ function bindBrandCrud(load) {
     form.reset();
     await load();
   });
+
+  document.querySelectorAll('[data-action="brand-edit-row"]').forEach((button) => {
+    button.addEventListener('click', () => {
+      const brand = brands.find((item) => item.id === Number(button.dataset.brandId));
+      const form = document.querySelector('[data-form="brand-update"]');
+      if (!brand || !form) return;
+      form.elements.id.value = brand.id;
+      form.elements.name.value = brand.name;
+      form.elements.name.focus();
+    });
+  });
+
+  document.querySelectorAll('[data-action="brand-delete-row"]').forEach((button) => {
+    button.addEventListener('click', async () => {
+      await api.deleteBrand(button.dataset.brandId);
+      await load();
+    });
+  });
 }
 
 export async function renderBrandsPage() {
@@ -169,16 +218,15 @@ export async function renderBrandsPage() {
     <section class="page brand-catalog-page">
       <header class="page-header">
         <div>
-          <p class="kicker">Бренды</p>
           <h1>Каталог брендов</h1>
         </div>
-        ${chips([`${brands.length} всего`, 'символы, цифры, A-Z, А-Я'])}
+        ${chips([`${brands.length} брендов`])}
       </header>
 
       <section class="brand-catalog-tools">
         <div class="panel panel-body search-shell">
           <label>
-            Поиск бренда
+            Поиск
             <input class="search-input compact" id="brandSearch" type="search" placeholder="Введите минимум 2 символа" autocomplete="off" />
           </label>
           <div class="suggestions hidden" id="brandSuggestions"></div>
@@ -189,7 +237,7 @@ export async function renderBrandsPage() {
         </div>
       </section>
 
-      ${renderGroups(groups)}
+      ${renderGroups(groups, { showLetters: false })}
     </section>
   `);
 
@@ -199,42 +247,45 @@ export async function renderBrandsPage() {
 
 export async function renderAdminBrandsPage() {
   const brands = await api.getBrands();
-  const groups = groupBrands(brands);
   const paint = async () => renderAdminBrandsPage();
 
   setPage(`
-    <section class="page">
-      <header class="page-header">
-        <div>
-          <p class="kicker">Администрирование</p>
-          <h1>Бренды</h1>
-        </div>
-        ${chips([`${brands.length} всего`, 'CRUD'])}
+    <section class="page admin-brands-page">
+      <header class="page-header admin-page-header">
+        <h1>Администрирование брендов</h1>
       </header>
 
-      <section class="grid two">
-        <form class="panel panel-body form" data-form="brand-create">
-          <h2>Создать бренд</h2>
-          <label>Название <input name="name" required minlength="2" maxlength="50" placeholder="Aesop" /></label>
-          <button class="button primary" type="submit">Создать</button>
+      <section class="admin-brand-forms">
+        <form class="panel panel-body form admin-brand-form" data-form="brand-create">
+          <h2>Создание</h2>
+          <div class="admin-inline-fields">
+            <label>Название <input name="name" required minlength="2" maxlength="50" placeholder="Aesop" /></label>
+            <button class="button primary" type="submit">Создать</button>
+          </div>
         </form>
 
-        <form class="panel panel-body form" data-form="brand-update">
-          <h2>Редактировать бренд</h2>
-          <div class="form-row">
+        <form class="panel panel-body form admin-brand-form" data-form="brand-update">
+          <h2>Редактирование</h2>
+          <div class="admin-edit-row">
             <label>ID <input name="id" required type="number" min="1" /></label>
             <label>Название <input name="name" required minlength="2" maxlength="50" /></label>
-          </div>
-          <div class="actions">
-            <button class="button primary" type="submit">Сохранить</button>
-            <button class="button danger" data-action="brand-delete" type="button">Удалить</button>
+            <div class="actions">
+              <button class="button primary" type="submit">Сохранить</button>
+              <button class="button danger" data-action="brand-delete" type="button">Удалить</button>
+            </div>
           </div>
         </form>
       </section>
 
-      ${renderGroups(groups, { showId: true })}
+      <section class="admin-brand-list panel panel-body">
+        <div class="admin-list-heading">
+          <h2>Список брендов</h2>
+          ${chips([`${brands.length} всего`])}
+        </div>
+        ${renderAdminBrandTable(brands)}
+      </section>
     </section>
   `);
 
-  bindBrandCrud(paint);
+  bindBrandCrud(paint, brands);
 }

@@ -2,12 +2,16 @@
   .app-shell,
   .detail-layout,
   .brand-catalog-tools,
+  .admin-brand-forms,
+  .admin-edit-row,
+  .admin-brand-table-row,
   .grid.two,
   .grid.three {
     grid-template-columns: var(--grid-single-column);
   }
 
-  .brand-directory {
+  .brand-directory,
+  .brand-directory.dense {
     column-count: 1;
     column-rule: none;
   }

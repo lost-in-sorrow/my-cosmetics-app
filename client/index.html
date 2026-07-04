@@ -18,11 +18,17 @@
         </a>
 
         <nav class="nav" aria-label="Основная навигация">
-          <a href="/brands" data-link>Бренды</a>
-          <a href="/products" data-link>Продукты</a>
           <a href="/categories" data-link>Категории</a>
-          <a href="/variants" data-link>Варианты</a>
-          <a href="/api-docs" target="_blank" rel="noreferrer">OpenAPI</a>
+          <a href="/products" data-link>Продукты</a>
+          <a href="/brands" data-link>Бренды</a>
+          <details class="nav-section" open>
+            <summary>Администрирование</summary>
+            <div class="nav-subnav">
+              <a href="/admin/brands" data-link>Бренды</a>
+              <a href="/admin/categories" data-link>Категории</a>
+              <a href="/api-docs" target="_blank" rel="noreferrer">OpenAPI</a>
+            </div>
+          </details>
         </nav>
 
         <div class="status-card">

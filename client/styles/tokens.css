@@ -91,6 +91,9 @@
   --size-page-max-width: 1320px;
   --size-app-min-width: 320px;
   --size-sidebar-width: 264px;
+  --size-brand-search-min: 260px;
+  --size-brand-search-max: 360px;
+  --size-brand-row-min-height: 38px;
   --size-detail-min: 280px;
   --size-detail-max: 420px;
   --size-catalog-card-min: 220px;

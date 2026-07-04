@@ -135,6 +135,10 @@
   font-size: var(--font-size-md);
 }
 
+.search-input.compact {
+  min-height: var(--size-control-min-height);
+}
+
 .suggestions {
   position: absolute;
   z-index: var(--z-index-dropdown);
@@ -162,6 +166,10 @@
   gap: var(--space-4);
 }
 
+.alphabet.compact {
+  gap: var(--space-3);
+}
+
 .letter-button {
   width: var(--size-letter-button-width);
   min-height: var(--size-letter-button-min-height);
@@ -179,13 +187,27 @@
 
 .brand-group {
   display: grid;
-  gap: var(--space-8);
+  gap: var(--space-4);
   scroll-margin-top: var(--space-17);
+  break-inside: avoid;
+  margin-bottom: var(--space-12);
 }
 
 .brand-letter {
   color: var(--accent-2);
-  font-size: var(--font-size-xl);
+  font-size: var(--font-size-lg);
+  margin-bottom: var(--space-4);
+}
+
+.brand-directory {
+  column-count: 2;
+  column-gap: var(--space-19);
+  column-rule: var(--border-width) var(--border-style) var(--border);
+}
+
+.brand-group-list {
+  display: grid;
+  gap: var(--space-3);
 }
 
 .brand-row {
@@ -193,6 +215,23 @@
   justify-content: space-between;
   gap: var(--space-12);
   padding: var(--space-12) var(--space-13);
+}
+
+.brand-row.compact {
+  min-height: var(--size-brand-row-min-height);
+  align-items: center;
+  padding: var(--space-7) var(--space-10);
+}
+
+.brand-catalog-tools {
+  display: grid;
+  grid-template-columns: minmax(var(--size-brand-search-min), var(--size-brand-search-max)) minmax(var(--space-0), 1fr);
+  gap: var(--space-13);
+  align-items: start;
+}
+
+.alphabet-panel {
+  align-self: stretch;
 }
 
 .variant-list {

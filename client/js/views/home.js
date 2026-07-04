@@ -13,16 +13,16 @@ export function renderHomePage() {
 
       <div class="grid three">
         <article class="panel panel-body">
+          <h2>Категории</h2>
+          <p class="subtle">Структура каталога для навигации по продуктам и группам ухода.</p>
+        </article>
+        <article class="panel panel-body">
+          <h2>Продукты</h2>
+          <p class="subtle">Карточки продуктов с изображениями, ценами, статусами и вариантами внутри продукта.</p>
+        </article>
+        <article class="panel panel-body">
           <h2>Бренды</h2>
-          <p class="subtle">Алфавитный каталог, поиск, создание, обновление, удаление и переход к продуктам бренда.</p>
-        </article>
-        <article class="panel panel-body">
-          <h2>Каталог</h2>
-          <p class="subtle">Сетка продуктов с изображениями, сводкой цен, статусами и карточками деталей продукта.</p>
-        </article>
-        <article class="panel panel-body">
-          <h2>Варианты</h2>
-          <p class="subtle">Редактирование объема, цены, URL изображения, статуса и данных характеристик в JSON.</p>
+          <p class="subtle">Компактный каталог брендов с поиском, алфавитной навигацией и переходом к товарам бренда.</p>
         </article>
       </div>
     </section>

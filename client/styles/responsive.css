@@ -1,9 +1,15 @@
 @media (max-width: 980px) {
   .app-shell,
   .detail-layout,
+  .brand-catalog-tools,
   .grid.two,
   .grid.three {
     grid-template-columns: var(--grid-single-column);
+  }
+
+  .brand-directory {
+    column-count: 1;
+    column-rule: none;
   }
 
   .sidebar {

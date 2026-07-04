@@ -124,3 +124,15 @@ Rules:
 - edit UI appears only after selecting a brand;
 - row actions use compact icon buttons with accessible labels;
 - text action buttons should be avoided in dense admin tables.
+
+# Admin Table Actions
+
+Administrative table actions should use compact icon buttons.
+
+Rules:
+
+- edit action uses a pencil icon;
+- delete action uses a trash icon;
+- icon buttons must have title and aria-label;
+- action buttons should be visually centered;
+- text action buttons are avoided in dense tables.

@@ -111,8 +111,21 @@ function renderAdminBrandTable(brands) {
               <span class="mono">${brand.id}</span>
               <strong>${escapeHtml(brand.name)}</strong>
               <span class="admin-table-actions">
-                <button class="icon-button" data-action="brand-edit-row" data-brand-id="${brand.id}" type="button" title="Редактировать" aria-label="Редактировать бренд ${escapeHtml(brand.name)}">✎</button>
-                <button class="icon-button danger" data-action="brand-delete-row" data-brand-id="${brand.id}" type="button" title="Удалить" aria-label="Удалить бренд ${escapeHtml(brand.name)}">×</button>
+                <button class="icon-button edit" data-action="brand-edit-row" data-brand-id="${brand.id}" type="button" title="Редактировать" aria-label="Редактировать бренд ${escapeHtml(brand.name)}">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M4 20h4l10.7-10.7a2.1 2.1 0 0 0 0-3L17.7 5.3a2.1 2.1 0 0 0-3 0L4 16v4Z" />
+                    <path d="m13.8 6.2 4 4" />
+                  </svg>
+                </button>
+                <button class="icon-button danger" data-action="brand-delete-row" data-brand-id="${brand.id}" type="button" title="Удалить" aria-label="Удалить бренд ${escapeHtml(brand.name)}">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M5 7h14" />
+                    <path d="M10 11v6" />
+                    <path d="M14 11v6" />
+                    <path d="M9 7V5h6v2" />
+                    <path d="m7 7 1 13h8l1-13" />
+                  </svg>
+                </button>
               </span>
             </div>
           `,
@@ -287,7 +300,7 @@ export async function renderAdminBrandsPage() {
 
         <div class="panel panel-body form admin-brand-form">
           <h2>Поиск</h2>
-          <label>Название или ID <input id="adminBrandSearch" type="search" placeholder="Введите название или ID" autocomplete="off" /></label>
+          <label>Название или ID <span class="admin-search-field"><input id="adminBrandSearch" type="search" placeholder="Введите название или ID" autocomplete="off" /></span></label>
         </div>
       </section>
 

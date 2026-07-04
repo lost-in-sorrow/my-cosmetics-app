@@ -1,0 +1,28 @@
+@media (max-width: 980px) {
+  .app-shell,
+  .detail-layout,
+  .grid.two,
+  .grid.three {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    position: static;
+    height: auto;
+  }
+
+  .workspace {
+    padding: 22px;
+  }
+}
+
+@media (max-width: 620px) {
+  .page-header,
+  .actions,
+  .toolbar,
+  .form-row {
+    align-items: stretch;
+    flex-direction: column;
+    grid-template-columns: 1fr;
+  }
+}

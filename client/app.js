@@ -14,5 +14,5 @@ document.addEventListener('click', (event) => {
 
 window.addEventListener('popstate', () => router.render());
 
-setStatus('Ready', 'Interface loaded');
+setStatus('Готово', 'Интерфейс загружен');
 router.render();

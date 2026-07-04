@@ -5,24 +5,24 @@ export function renderHomePage() {
     <section class="page">
       <header class="page-header">
         <div>
-          <p class="kicker">Inventory</p>
-          <h1>Cosmetics management panel</h1>
+          <p class="kicker">Инвентарь</p>
+          <h1>Панель управления косметикой</h1>
         </div>
-        <a class="button primary" href="/brands" data-link>Open brands</a>
+        <a class="button primary" href="/brands" data-link>Открыть бренды</a>
       </header>
 
       <div class="grid three">
         <article class="panel panel-body">
-          <h2>Brands</h2>
-          <p class="subtle">Alphabetical catalog, search, create, update, delete, and brand product navigation.</p>
+          <h2>Бренды</h2>
+          <p class="subtle">Алфавитный каталог, поиск, создание, обновление, удаление и переход к продуктам бренда.</p>
         </article>
         <article class="panel panel-body">
-          <h2>Catalog</h2>
-          <p class="subtle">Product grid with images, price summary, statuses, and product detail cards.</p>
+          <h2>Каталог</h2>
+          <p class="subtle">Сетка продуктов с изображениями, сводкой цен, статусами и карточками деталей продукта.</p>
         </article>
         <article class="panel panel-body">
-          <h2>Variants</h2>
-          <p class="subtle">Edit volume, price, image URL, status, and JSON feature data.</p>
+          <h2>Варианты</h2>
+          <p class="subtle">Редактирование объема, цены, URL изображения, статуса и данных характеристик в JSON.</p>
         </article>
       </div>
     </section>

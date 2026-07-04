@@ -29,9 +29,9 @@ function matchRoute(pathname) {
         <header class="page-header">
           <div>
             <p class="kicker">404</p>
-            <h1>Page not found</h1>
+            <h1>Страница не найдена</h1>
           </div>
-          <a class="button primary" href="/brands" data-link>Go to brands</a>
+          <a class="button primary" href="/brands" data-link>Перейти к брендам</a>
         </header>
       </section>
     `);
@@ -51,12 +51,12 @@ export const router = {
     try {
       await matchRoute(pathname)();
     } catch (error) {
-      setStatus('Error', error.message, true);
+      setStatus('Ошибка', error.message, true);
       setPage(`
         <section class="page">
           <header class="page-header">
             <div>
-              <p class="kicker">Error</p>
+              <p class="kicker">Ошибка</p>
               <h1>${error.message}</h1>
             </div>
           </header>

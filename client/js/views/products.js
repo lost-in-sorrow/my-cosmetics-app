@@ -9,10 +9,10 @@ export async function renderProductsPage() {
     <section class="page">
       <header class="page-header">
         <div>
-          <p class="kicker">Catalog</p>
-          <h1>Products</h1>
+          <p class="kicker">Каталог</p>
+          <h1>Продукты</h1>
         </div>
-        ${chips([`${products.length} items`, 'with variants only'])}
+        ${chips([`${products.length} позиций`, 'только с вариантами'])}
       </header>
 
       ${renderProductGrid(products)}

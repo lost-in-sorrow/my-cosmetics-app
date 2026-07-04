@@ -21,8 +21,8 @@ function renderVariantButtons(variants, selectedId) {
     .map(
       (variant) => `
         <button class="variant-card ${variant.id === selectedId ? 'active' : ''}" data-variant-id="${variant.id}" type="button">
-          <strong>${escapeHtml(variant.volume ?? 'no volume')} ml</strong>
-          ${chips([`ID ${variant.id}`, variant.status || 'no status', variant.price == null ? 'no price' : `${variant.price} RUB`])}
+          <strong>${escapeHtml(variant.volume ?? 'объем не указан')} мл</strong>
+          ${chips([`ID ${variant.id}`, variant.status || 'статус не указан', variant.price == null ? 'цена не указана' : `${variant.price} RUB`])}
         </button>
       `,
     )
@@ -104,10 +104,10 @@ export async function renderProductDetailPage(productId) {
       <section class="page">
         <header class="page-header">
           <div>
-            <p class="kicker">Product</p>
-            <h1>Product not found</h1>
+            <p class="kicker">Продукт</p>
+            <h1>Продукт не найден</h1>
           </div>
-          <a class="button primary" href="/products" data-link>Go to catalog</a>
+          <a class="button primary" href="/products" data-link>Перейти в каталог</a>
         </header>
       </section>
     `);
@@ -122,10 +122,10 @@ export async function renderProductDetailPage(productId) {
     <section class="page">
       <header class="page-header">
         <div>
-          <p class="kicker">Product card</p>
+          <p class="kicker">Карточка продукта</p>
           <h1>${escapeHtml(product.name)}</h1>
         </div>
-        ${chips([`product ${product.id}`, `brand ${product.brand_id}`, `category ${product.category_id}`])}
+        ${chips([`продукт ${product.id}`, `бренд ${product.brand_id}`, `категория ${product.category_id}`])}
       </header>
 
       <section class="detail-layout">
@@ -135,58 +135,58 @@ export async function renderProductDetailPage(productId) {
           </div>
           <div class="panel-body">
             <h2>${escapeHtml(productPrice(product))}</h2>
-            <p class="subtle">${escapeHtml(product.description || 'Description not set')}</p>
+            <p class="subtle">${escapeHtml(product.description || 'Описание не указано')}</p>
             <div class="variant-list">${renderVariantButtons(variants, selectedId)}</div>
           </div>
         </article>
 
         <div class="grid">
           <form class="panel panel-body form" data-form="product-edit">
-            <h2>Edit product</h2>
+            <h2>Редактировать продукт</h2>
             <div class="form-row">
-              <label>Name <input name="name" value="${escapeHtml(product.name)}" /></label>
-              <label>Brand ID <input name="brand_id" type="number" min="1" value="${product.brand_id}" /></label>
+              <label>Название <input name="name" value="${escapeHtml(product.name)}" /></label>
+              <label>ID бренда <input name="brand_id" type="number" min="1" value="${product.brand_id}" /></label>
             </div>
-            <label>Category ID <input name="category_id" type="number" min="1" value="${product.category_id}" /></label>
-            <label>Description <textarea name="description" rows="2">${escapeHtml(product.description || '')}</textarea></label>
-            <button class="button primary" type="submit">Save product</button>
+            <label>ID категории <input name="category_id" type="number" min="1" value="${product.category_id}" /></label>
+            <label>Описание <textarea name="description" rows="2">${escapeHtml(product.description || '')}</textarea></label>
+            <button class="button primary" type="submit">Сохранить продукт</button>
           </form>
 
           <form class="panel panel-body form" data-form="variant-edit">
-            <h2>Edit selected variant</h2>
+            <h2>Редактировать выбранный вариант</h2>
             <input name="variant_id" type="hidden" />
             <div class="form-row">
-              <label>Volume <input name="volume" type="number" step="0.01" /></label>
-              <label>Price <input name="price" type="number" step="0.01" /></label>
+              <label>Объем <input name="volume" type="number" step="0.01" /></label>
+              <label>Цена <input name="price" type="number" step="0.01" /></label>
             </div>
             <div class="form-row">
-              <label>Status
+              <label>Статус
                 <select name="status">
-                  <option value="">do not change</option>
+                  <option value="">не менять</option>
                   <option value="new">new</option>
                   <option value="in_use">in_use</option>
                   <option value="finished">finished</option>
                   <option value="expired">expired</option>
                 </select>
               </label>
-              <label>Image URL <input name="image_url" type="url" /></label>
+              <label>URL изображения <input name="image_url" type="url" /></label>
             </div>
-            <label>Features JSON <textarea name="features" rows="3"></textarea></label>
+            <label>Характеристики JSON <textarea name="features" rows="3"></textarea></label>
             <div class="actions">
-              <button class="button primary" type="submit">Save variant</button>
-              <button class="button" data-action="variant-finish" type="button">finish</button>
-              <button class="button danger" data-action="variant-expire" type="button">expire</button>
+              <button class="button primary" type="submit">Сохранить вариант</button>
+              <button class="button" data-action="variant-finish" type="button">Завершить</button>
+              <button class="button danger" data-action="variant-expire" type="button">Просрочить</button>
             </div>
           </form>
 
           <form class="panel panel-body form" data-form="variant-add">
-            <h2>Add new variant</h2>
+            <h2>Добавить новый вариант</h2>
             <div class="form-row">
-              <label>Volume <input name="volume" type="number" step="0.01" placeholder="50" /></label>
-              <label>Price <input name="price" type="number" step="0.01" placeholder="1590" /></label>
+              <label>Объем <input name="volume" type="number" step="0.01" placeholder="50" /></label>
+              <label>Цена <input name="price" type="number" step="0.01" placeholder="1590" /></label>
             </div>
             <div class="form-row">
-              <label>Status
+              <label>Статус
                 <select name="status" required>
                   <option value="new">new</option>
                   <option value="in_use">in_use</option>
@@ -194,10 +194,10 @@ export async function renderProductDetailPage(productId) {
                   <option value="expired">expired</option>
                 </select>
               </label>
-              <label>Image URL <input name="image_url" type="url" /></label>
+              <label>URL изображения <input name="image_url" type="url" /></label>
             </div>
-            <label>Features JSON <textarea name="features" rows="3" placeholder='{"color":"black"}'></textarea></label>
-            <button class="button primary" type="submit">Add variant</button>
+            <label>Характеристики JSON <textarea name="features" rows="3" placeholder='{"color":"black"}'></textarea></label>
+            <button class="button primary" type="submit">Добавить вариант</button>
           </form>
         </div>
       </section>

@@ -28,7 +28,7 @@ function renderAlphabet(letters) {
 
 function renderGroups(groups) {
   const letters = Object.keys(groups).sort((a, b) => a.localeCompare(b, 'ru'));
-  if (!letters.length) return emptyState('No brands yet');
+  if (!letters.length) return emptyState('Брендов пока нет');
 
   return letters
     .map(
@@ -73,12 +73,12 @@ function bindSearch(brands) {
             (brand) => `
               <a class="suggestion" href="/brands/${brand.id}" data-link>
                 <span>${escapeHtml(brand.name)}</span>
-                <span class="subtle">open</span>
+                <span class="subtle">открыть</span>
               </a>
             `,
           )
           .join('')
-      : `<div class="suggestion"><span>No matches</span></div>`;
+      : `<div class="suggestion"><span>Совпадений нет</span></div>`;
     suggestions.classList.remove('hidden');
   });
 }
@@ -131,41 +131,41 @@ export async function renderBrandsPage() {
     <section class="page">
       <header class="page-header">
         <div>
-          <p class="kicker">Brands</p>
-          <h1>Brands</h1>
+          <p class="kicker">Бренды</p>
+          <h1>Бренды</h1>
         </div>
-        ${chips([`${brands.length} total`, 'alphabetical'])}
+        ${chips([`${brands.length} всего`, 'по алфавиту'])}
       </header>
 
       <section class="panel panel-body search-shell">
         <label>
-          Brand search
-          <input class="search-input" id="brandSearch" type="search" placeholder="Type at least 2 characters" autocomplete="off" />
+          Поиск бренда
+          <input class="search-input" id="brandSearch" type="search" placeholder="Введите минимум 2 символа" autocomplete="off" />
         </label>
         <div class="suggestions hidden" id="brandSuggestions"></div>
       </section>
 
       <section class="panel panel-body">
-        <h2>Alphabet</h2>
+        <h2>Алфавит</h2>
         ${renderAlphabet(letters)}
       </section>
 
       <section class="grid two">
         <form class="panel panel-body form" data-form="brand-create">
-          <h2>Create brand</h2>
-          <label>Name <input name="name" required minlength="2" maxlength="50" placeholder="Aesop" /></label>
-          <button class="button primary" type="submit">Create</button>
+          <h2>Создать бренд</h2>
+          <label>Название <input name="name" required minlength="2" maxlength="50" placeholder="Aesop" /></label>
+          <button class="button primary" type="submit">Создать</button>
         </form>
 
         <form class="panel panel-body form" data-form="brand-update">
-          <h2>Edit brand</h2>
+          <h2>Редактировать бренд</h2>
           <div class="form-row">
             <label>ID <input name="id" required type="number" min="1" /></label>
-            <label>Name <input name="name" required minlength="2" maxlength="50" /></label>
+            <label>Название <input name="name" required minlength="2" maxlength="50" /></label>
           </div>
           <div class="actions">
-            <button class="button primary" type="submit">Save</button>
-            <button class="button danger" data-action="brand-delete" type="button">Delete</button>
+            <button class="button primary" type="submit">Сохранить</button>
+            <button class="button danger" data-action="brand-delete" type="button">Удалить</button>
           </div>
         </form>
       </section>

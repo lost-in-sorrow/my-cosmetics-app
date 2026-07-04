@@ -32,27 +32,27 @@ export async function renderBrandProductsPage(brandId) {
     <section class="page">
       <header class="page-header">
         <div>
-          <p class="kicker">Brand catalog</p>
-          <h1>${escapeHtml(brand ? brand.name : `Brand #${brandId}`)}</h1>
+          <p class="kicker">Каталог бренда</p>
+          <h1>${escapeHtml(brand ? brand.name : `Бренд #${brandId}`)}</h1>
         </div>
-        ${chips([`${brandProducts.length} products`, `brand ${brandId}`])}
+        ${chips([`${brandProducts.length} продуктов`, `бренд ${brandId}`])}
       </header>
 
       <section class="panel panel-body">
-        <h2>Create product for this brand</h2>
-        <p class="subtle">A product is created together with its first variant, so the catalog only contains products that can be displayed.</p>
+        <h2>Создать продукт для этого бренда</h2>
+        <p class="subtle">Продукт создается вместе с первым вариантом, поэтому в каталоге остаются только продукты, которые можно отобразить.</p>
         <form class="form" data-form="product-create">
           <div class="form-row">
-            <label>Name <input name="name" required placeholder="Hydrating Serum" /></label>
-            <label>Category ID <input name="category_id" required type="number" min="1" placeholder="1" /></label>
+            <label>Название <input name="name" required placeholder="Увлажняющая сыворотка" /></label>
+            <label>ID категории <input name="category_id" required type="number" min="1" placeholder="1" /></label>
           </div>
-          <label>Description <textarea name="description" rows="2"></textarea></label>
+          <label>Описание <textarea name="description" rows="2"></textarea></label>
           <div class="form-row">
-            <label>Volume <input name="volume" type="number" step="0.01" placeholder="30" /></label>
-            <label>Price <input name="price" type="number" step="0.01" placeholder="1290" /></label>
+            <label>Объем <input name="volume" type="number" step="0.01" placeholder="30" /></label>
+            <label>Цена <input name="price" type="number" step="0.01" placeholder="1290" /></label>
           </div>
           <div class="form-row">
-            <label>Status
+            <label>Статус
               <select name="status" required>
                 <option value="new">new</option>
                 <option value="in_use">in_use</option>
@@ -60,10 +60,10 @@ export async function renderBrandProductsPage(brandId) {
                 <option value="expired">expired</option>
               </select>
             </label>
-            <label>Image URL <input name="image_url" type="url" /></label>
+            <label>URL изображения <input name="image_url" type="url" /></label>
           </div>
-          <label>Features JSON <textarea name="features" rows="2" placeholder='{"shade":"01"}'></textarea></label>
-          <button class="button primary" type="submit">Create product</button>
+          <label>Характеристики JSON <textarea name="features" rows="2" placeholder='{"shade":"01"}'></textarea></label>
+          <button class="button primary" type="submit">Создать продукт</button>
         </form>
       </section>
 

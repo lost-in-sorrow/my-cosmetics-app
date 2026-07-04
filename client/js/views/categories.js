@@ -2,7 +2,7 @@ import { api } from '../api.js';
 import { chips, emptyState, escapeHtml, formToObject, numberOrNull, setPage } from '../ui.js';
 
 function renderCategoryList(categories) {
-  if (!categories.length) return emptyState('No categories yet');
+  if (!categories.length) return emptyState('Категорий пока нет');
 
   return `
     <div class="grid">
@@ -11,7 +11,7 @@ function renderCategoryList(categories) {
           (category) => `
             <article class="brand-row">
               <strong>${escapeHtml(category.name)}</strong>
-              <span class="subtle">ID ${category.id} | parent ${category.parent_id ?? 'none'}</span>
+              <span class="subtle">ID ${category.id} | родительская ${category.parent_id ?? 'нет'}</span>
             </article>
           `,
         )
@@ -54,30 +54,30 @@ export async function renderCategoriesPage() {
     <section class="page">
       <header class="page-header">
         <div>
-          <p class="kicker">Categories</p>
-          <h1>Categories</h1>
+          <p class="kicker">Категории</p>
+          <h1>Категории</h1>
         </div>
-        ${chips([`${categories.length} total`])}
+        ${chips([`${categories.length} всего`])}
       </header>
 
       <section class="grid two">
         <form class="panel panel-body form" data-form="category-create">
-          <h2>Create category</h2>
-          <label>Name <input name="name" required minlength="2" /></label>
-          <label>Parent ID <input name="parent_id" type="number" min="1" /></label>
-          <button class="button primary" type="submit">Create</button>
+          <h2>Создать категорию</h2>
+          <label>Название <input name="name" required minlength="2" /></label>
+          <label>Родительская ID <input name="parent_id" type="number" min="1" /></label>
+          <button class="button primary" type="submit">Создать</button>
         </form>
 
         <form class="panel panel-body form" data-form="category-update">
-          <h2>Edit category</h2>
+          <h2>Редактировать категорию</h2>
           <div class="form-row">
             <label>ID <input name="id" required type="number" min="1" /></label>
-            <label>Name <input name="name" required minlength="2" /></label>
+            <label>Название <input name="name" required minlength="2" /></label>
           </div>
-          <label>Parent ID <input name="parent_id" type="number" min="1" /></label>
+          <label>Родительская ID <input name="parent_id" type="number" min="1" /></label>
           <div class="actions">
-            <button class="button primary" type="submit">Save</button>
-            <button class="button danger" data-action="category-delete" type="button">Delete</button>
+            <button class="button primary" type="submit">Сохранить</button>
+            <button class="button danger" data-action="category-delete" type="button">Удалить</button>
           </div>
         </form>
       </section>

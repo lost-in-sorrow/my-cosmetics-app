@@ -2,7 +2,7 @@ import { setStatus } from './ui.js';
 
 async function request(path, options = {}) {
   const method = options.method || 'GET';
-  setStatus('Request', `${method} ${path}`);
+  setStatus('Запрос', `${method} ${path}`);
 
   const response = await fetch(path, {
     headers: options.body ? { 'Content-Type': 'application/json' } : undefined,
@@ -14,11 +14,11 @@ async function request(path, options = {}) {
 
   if (!response.ok) {
     const message = data?.message || data?.error || `HTTP ${response.status}`;
-    setStatus('Error', message, true);
+    setStatus('Ошибка', message, true);
     throw new Error(message);
   }
 
-  setStatus('Ready', `${method} ${path}`);
+  setStatus('Готово', `${method} ${path}`);
   return data;
 }
 

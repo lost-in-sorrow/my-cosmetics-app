@@ -32,35 +32,35 @@ export function renderVariantsPage() {
     <section class="page">
       <header class="page-header">
         <div>
-          <p class="kicker">Variant tools</p>
-          <h1>Variants</h1>
+          <p class="kicker">Инструменты вариантов</p>
+          <h1>Варианты</h1>
         </div>
       </header>
 
       <form class="panel panel-body form" data-form="variant-tools">
-        <h2>Quick edit by Variant ID</h2>
-        <label>Variant ID <input name="variant_id" required type="number" min="1" /></label>
+        <h2>Быстрое редактирование по ID варианта</h2>
+        <label>ID варианта <input name="variant_id" required type="number" min="1" /></label>
         <div class="form-row">
-          <label>Volume <input name="volume" type="number" step="0.01" /></label>
-          <label>Price <input name="price" type="number" step="0.01" /></label>
+          <label>Объем <input name="volume" type="number" step="0.01" /></label>
+          <label>Цена <input name="price" type="number" step="0.01" /></label>
         </div>
         <div class="form-row">
-          <label>Status
+          <label>Статус
             <select name="status">
-              <option value="">do not change</option>
+              <option value="">не менять</option>
               <option value="new">new</option>
               <option value="in_use">in_use</option>
               <option value="finished">finished</option>
               <option value="expired">expired</option>
             </select>
           </label>
-          <label>Image URL <input name="image_url" type="url" /></label>
+          <label>URL изображения <input name="image_url" type="url" /></label>
         </div>
-        <label>Features JSON <textarea name="features" rows="3"></textarea></label>
+        <label>Характеристики JSON <textarea name="features" rows="3"></textarea></label>
         <div class="actions">
-          <button class="button primary" type="submit">Save</button>
-          <button class="button" data-action="variant-tools-finish" type="button">finish</button>
-          <button class="button danger" data-action="variant-tools-expire" type="button">expire</button>
+          <button class="button primary" type="submit">Сохранить</button>
+          <button class="button" data-action="variant-tools-finish" type="button">Завершить</button>
+          <button class="button danger" data-action="variant-tools-expire" type="button">Просрочить</button>
         </div>
       </form>
     </section>

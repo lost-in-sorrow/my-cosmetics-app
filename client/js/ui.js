@@ -79,8 +79,8 @@ export function productPrice(product) {
     .map((variant) => variant.price)
     .filter((price) => typeof price === 'number');
 
-  if (!prices.length) return 'Price not set';
-  return `from ${Math.min(...prices)} RUB`;
+  if (!prices.length) return 'Цена не указана';
+  return `от ${Math.min(...prices)} RUB`;
 }
 
 export function activateNav(pathname) {

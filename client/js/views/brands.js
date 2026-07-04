@@ -107,12 +107,12 @@ function renderAdminBrandTable(brands) {
       ${items
         .map(
           (brand) => `
-            <div class="admin-brand-table-row">
+            <div class="admin-brand-table-row" data-brand-row data-brand-id="${brand.id}" data-brand-name="${escapeHtml(brand.name.toLowerCase())}">
               <span class="mono">${brand.id}</span>
               <strong>${escapeHtml(brand.name)}</strong>
               <span class="admin-table-actions">
-                <button class="button compact" data-action="brand-edit-row" data-brand-id="${brand.id}" type="button">Изменить</button>
-                <button class="button compact danger" data-action="brand-delete-row" data-brand-id="${brand.id}" type="button">Удалить</button>
+                <button class="icon-button" data-action="brand-edit-row" data-brand-id="${brand.id}" type="button" title="Редактировать" aria-label="Редактировать бренд ${escapeHtml(brand.name)}">✎</button>
+                <button class="icon-button danger" data-action="brand-delete-row" data-brand-id="${brand.id}" type="button" title="Удалить" aria-label="Удалить бренд ${escapeHtml(brand.name)}">×</button>
               </span>
             </div>
           `,
@@ -154,6 +154,21 @@ function bindSearch(brands) {
   });
 }
 
+function bindAdminSearch() {
+  const input = document.querySelector('#adminBrandSearch');
+  const rows = [...document.querySelectorAll('[data-brand-row]')];
+  if (!input) return;
+
+  input.addEventListener('input', () => {
+    const value = input.value.trim().toLowerCase();
+    rows.forEach((row) => {
+      const name = row.dataset.brandName || '';
+      const id = row.dataset.brandId || '';
+      row.classList.toggle('hidden', Boolean(value) && !name.includes(value) && !id.includes(value));
+    });
+  });
+}
+
 function bindAlphabet() {
   document.querySelectorAll('[data-letter]').forEach((button) => {
     button.addEventListener('click', () => {
@@ -161,6 +176,26 @@ function bindAlphabet() {
       document.getElementById(`letter-${encodeURIComponent(letter)}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
   });
+}
+
+function showEditPanel(brand) {
+  const panel = document.querySelector('[data-panel="brand-edit"]');
+  const form = document.querySelector('[data-form="brand-update"]');
+  if (!panel || !form) return;
+
+  panel.classList.remove('hidden');
+  form.elements.id.value = brand.id;
+  form.elements.name.value = brand.name;
+  form.elements.name.focus();
+}
+
+function hideEditPanel() {
+  const panel = document.querySelector('[data-panel="brand-edit"]');
+  const form = document.querySelector('[data-form="brand-update"]');
+  if (!panel || !form) return;
+
+  form.reset();
+  panel.classList.add('hidden');
 }
 
 function bindBrandCrud(load, brands = []) {
@@ -178,26 +213,12 @@ function bindBrandCrud(load, brands = []) {
     await load();
   });
 
-  document.querySelector('[data-action="brand-delete"]').addEventListener('click', async () => {
-    const form = document.querySelector('[data-form="brand-update"]');
-    if (!form.elements.id.value) {
-      form.elements.id.reportValidity();
-      return;
-    }
-
-    await api.deleteBrand(form.elements.id.value);
-    form.reset();
-    await load();
-  });
+  document.querySelector('[data-action="brand-edit-cancel"]')?.addEventListener('click', hideEditPanel);
 
   document.querySelectorAll('[data-action="brand-edit-row"]').forEach((button) => {
     button.addEventListener('click', () => {
       const brand = brands.find((item) => item.id === Number(button.dataset.brandId));
-      const form = document.querySelector('[data-form="brand-update"]');
-      if (!brand || !form) return;
-      form.elements.id.value = brand.id;
-      form.elements.name.value = brand.name;
-      form.elements.name.focus();
+      if (brand) showEditPanel(brand);
     });
   });
 
@@ -264,15 +285,20 @@ export async function renderAdminBrandsPage() {
           </div>
         </form>
 
-        <form class="panel panel-body form admin-brand-form" data-form="brand-update">
-          <h2>Редактирование</h2>
-          <div class="admin-edit-row">
-            <label>ID <input name="id" required type="number" min="1" /></label>
-            <label>Название <input name="name" required minlength="2" maxlength="50" /></label>
-            <div class="actions">
-              <button class="button primary" type="submit">Сохранить</button>
-              <button class="button danger" data-action="brand-delete" type="button">Удалить</button>
-            </div>
+        <div class="panel panel-body form admin-brand-form">
+          <h2>Поиск</h2>
+          <label>Название или ID <input id="adminBrandSearch" type="search" placeholder="Введите название или ID" autocomplete="off" /></label>
+        </div>
+      </section>
+
+      <section class="panel panel-body form admin-brand-form admin-edit-panel hidden" data-panel="brand-edit">
+        <h2>Редактирование</h2>
+        <form class="admin-edit-row" data-form="brand-update">
+          <label>ID <input name="id" required readonly type="number" min="1" /></label>
+          <label>Название <input name="name" required minlength="2" maxlength="50" /></label>
+          <div class="actions">
+            <button class="button primary" type="submit">Сохранить</button>
+            <button class="button" data-action="brand-edit-cancel" type="button">Отмена</button>
           </div>
         </form>
       </section>
@@ -288,4 +314,5 @@ export async function renderAdminBrandsPage() {
   `);
 
   bindBrandCrud(paint, brands);
+  bindAdminSearch();
 }

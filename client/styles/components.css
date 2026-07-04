@@ -299,7 +299,7 @@
 
 .admin-brand-forms {
   display: grid;
-  grid-template-columns: minmax(var(--space-0), 0.8fr) minmax(var(--size-admin-edit-min), 1.4fr);
+  grid-template-columns: minmax(var(--size-admin-edit-min), 1fr) minmax(var(--size-admin-edit-min), 1fr);
   gap: var(--space-10);
   align-items: start;
 }
@@ -330,13 +330,17 @@
 }
 
 .admin-edit-row {
-  grid-template-columns: var(--size-admin-id-field) minmax(var(--space-0), 1fr) auto;
+  grid-template-columns: var(--size-admin-id-field) minmax(var(--space-0), var(--size-admin-name-max)) auto;
 }
 
 .admin-brand-form input {
   min-height: var(--size-admin-control-min-height);
   padding: var(--space-4) var(--space-8);
   font-size: var(--font-size-sm);
+}
+
+.admin-edit-panel {
+  gap: var(--space-8);
 }
 
 .admin-brand-form label {
@@ -376,11 +380,11 @@
 
 .admin-brand-table-row {
   display: grid;
-  grid-template-columns: var(--size-admin-id-field) minmax(var(--space-0), 1fr) var(--size-admin-actions-width);
-  gap: var(--space-10);
+  grid-template-columns: var(--size-admin-id-field) minmax(var(--space-0), var(--size-admin-name-max)) var(--size-admin-actions-width);
+  gap: var(--space-8);
   align-items: center;
   min-height: var(--size-admin-control-min-height);
-  padding: var(--space-4) var(--space-8);
+  padding: var(--space-3) var(--space-8);
   border-bottom: var(--border-width) var(--border-style) var(--border);
 }
 
@@ -403,17 +407,35 @@
 .admin-table-actions {
   display: flex;
   justify-content: flex-end;
-  gap: var(--space-4);
-}
-
-.button.compact {
-  min-height: var(--size-admin-control-min-height);
-  padding: var(--space-4) var(--space-8);
-  font-size: var(--font-size-sm);
+  gap: var(--space-3);
 }
 
 .mono {
   font-variant-numeric: tabular-nums;
+}
+
+.icon-button {
+  display: inline-grid;
+  width: var(--size-icon-button);
+  height: var(--size-icon-button);
+  place-items: center;
+  border: var(--border-width) var(--border-style) var(--border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--muted);
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-icon);
+}
+
+.icon-button:hover {
+  border-color: var(--border-accent-strong);
+  color: var(--accent-2);
+  background: var(--interactive-accent-bg);
+}
+
+.icon-button.danger:hover {
+  border-color: var(--border-danger);
+  color: var(--danger-soft);
 }
 
 .variant-list {

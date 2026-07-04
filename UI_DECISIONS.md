@@ -111,3 +111,16 @@ Do not add interface elements "for future use".
 If there is only one available action or sorting mode, do not display controls suggesting multiple choices.
 
 Every visible control should provide actual value to the user.
+
+# Brand Administration Editing
+
+The brand administration page should not show a permanent edit form by default.
+
+Rules:
+
+- creation is available as a compact form;
+- search is visible near creation controls;
+- editing is initiated from a table row;
+- edit UI appears only after selecting a brand;
+- row actions use compact icon buttons with accessible labels;
+- text action buttons should be avoided in dense admin tables.

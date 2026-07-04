@@ -410,6 +410,10 @@
   background: var(--surface-2);
 }
 
+.admin-category-table-row {
+  grid-template-columns: var(--size-admin-id-field) minmax(var(--space-0), 1fr) var(--size-admin-parent-field) var(--size-admin-actions-width);
+}
+
 .admin-table-actions {
   display: flex;
   justify-content: flex-end;
@@ -418,6 +422,183 @@
 
 .mono {
   font-variant-numeric: tabular-nums;
+}
+
+.category-catalog-page {
+  gap: var(--space-13);
+  max-width: var(--size-admin-page-max-width);
+}
+
+.category-catalog-page .page-header {
+  padding-bottom: var(--space-10);
+}
+
+.category-catalog-page .page-header h1 {
+  font-size: var(--font-size-2xl);
+  line-height: var(--line-height-admin-title);
+}
+
+.category-catalog {
+  display: grid;
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.category-search-panel {
+  padding: var(--space-10);
+  border-bottom: var(--border-width) var(--border-style) var(--border);
+}
+
+.category-catalog-page .search-input {
+  min-height: var(--size-admin-control-min-height);
+  padding: var(--space-4) var(--space-8);
+  font-size: var(--font-size-sm);
+}
+
+.category-catalog-browser {
+  display: grid;
+  gap: var(--space-8);
+  padding: var(--space-10);
+}
+
+.category-breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4);
+  min-height: var(--size-admin-control-min-height);
+  padding: var(--space-0) var(--space-1) var(--space-8);
+  border-bottom: var(--border-width) var(--border-style) var(--border);
+}
+
+.category-breadcrumb-item {
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--accent-2);
+  padding: var(--space-3) var(--space-6);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+}
+
+.category-breadcrumb-item:hover {
+  background: var(--interactive-accent-bg);
+}
+
+.category-breadcrumb-separator {
+  color: var(--soft);
+}
+
+.category-tree-shell {
+  display: flex;
+  overflow-x: auto;
+  min-height: 520px;
+  background: var(--surface);
+}
+
+.category-column {
+  display: grid;
+  align-content: start;
+  flex: 0 0 var(--size-category-column);
+  min-width: var(--size-category-column);
+  border-right: var(--border-width) var(--border-style) var(--border);
+  padding: var(--space-6);
+}
+
+.category-column:last-child {
+  border-right: 0;
+}
+
+.category-tree-row,
+.category-search-result {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-10);
+  min-height: var(--size-admin-control-min-height);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text);
+  padding: var(--space-5) var(--space-8);
+  text-align: left;
+}
+
+.category-tree-row span:first-child,
+.category-search-result-name,
+.category-search-result-path {
+  min-width: var(--space-0);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.category-tree-row:hover,
+.category-search-result:hover {
+  background: var(--surface-2);
+}
+
+.category-tree-row.in-path {
+  background: var(--interactive-accent-bg);
+  color: var(--accent-2);
+}
+
+.category-tree-row.active {
+  background: var(--interactive-accent-bg-strong);
+  box-shadow: inset 3px 0 0 var(--accent);
+}
+
+.category-row-arrow {
+  color: var(--soft);
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-icon);
+}
+
+.category-row-spacer {
+  width: var(--size-catalog-arrow-width);
+  flex: 0 0 var(--size-catalog-arrow-width);
+}
+
+.category-search-results {
+  display: grid;
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.category-search-result {
+  display: grid;
+  justify-content: stretch;
+  min-height: 44px;
+  border-bottom: var(--border-width) var(--border-style) var(--border);
+  border-radius: var(--space-0);
+}
+
+.category-search-result:last-child {
+  border-bottom: 0;
+}
+
+.category-search-result-name {
+  font-weight: var(--font-weight-bold);
+}
+
+.category-search-result-path {
+  color: var(--muted);
+  font-size: var(--font-size-xs);
+}
+
+.admin-category-create-row,
+.admin-category-edit-row {
+  display: grid;
+  gap: var(--space-8);
+  align-items: end;
+}
+
+.admin-category-create-row {
+  grid-template-columns: minmax(var(--space-0), 1fr) minmax(var(--space-0), var(--size-admin-parent-field)) auto;
+}
+
+.admin-category-edit-row {
+  grid-template-columns: var(--size-admin-id-field) minmax(var(--space-0), 1fr) minmax(var(--space-0), var(--size-admin-parent-field)) auto;
 }
 
 .icon-button {

@@ -150,3 +150,49 @@ Current shared patterns:
 - catalog name sorting.
 
 The goal is consistency across brands and categories without large frontend rewrites.
+
+# Category Navigation
+
+The category catalog uses a hierarchical navigation model rather than a flat list.
+
+Working page purpose:
+
+- browse the category hierarchy;
+- quickly navigate between nesting levels;
+- select a category.
+
+Interaction principles:
+
+- root categories are displayed first;
+- selecting a category reveals its child categories in the next adjacent column;
+- each subsequent level appears in the next column;
+- the implementation must support arbitrary nesting depth and must not rely on a fixed number of columns;
+- if the hierarchy exceeds the available width, horizontal scrolling within the hierarchy area is acceptable.
+
+Search behavior:
+
+- search is available at the top of the page;
+- search does not replace the hierarchy;
+- search is a navigation aid, not an alternative page mode.
+
+The working category page must not contain:
+
+- create;
+- edit;
+- delete;
+- ID display;
+- parent_id display.
+
+# Category Catalog Visual Behavior
+
+The category catalog should behave like a desktop mega menu, not like a table.
+
+Rules:
+
+- each hierarchy level is displayed as a separate adjacent column;
+- category rows are navigation items;
+- categories with children show a chevron;
+- selected category and selected path must be visually clear;
+- columns must be visually separated;
+- breadcrumb/path should show the current selected category chain;
+- search results should show category paths and allow opening the matching category in the hierarchy.

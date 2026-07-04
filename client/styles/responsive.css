@@ -4,7 +4,10 @@
   .brand-catalog-tools,
   .admin-brand-forms,
   .admin-edit-row,
+  .admin-category-create-row,
+  .admin-category-edit-row,
   .admin-brand-table-row,
+  .admin-category-table-row,
   .grid.two,
   .grid.three {
     grid-template-columns: var(--grid-single-column);

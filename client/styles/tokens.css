@@ -98,9 +98,11 @@
   --size-admin-id-field: 84px;
   --size-admin-edit-min: 420px;
   --size-admin-actions-width: 96px;
+  --size-admin-parent-field: 240px;
   --size-admin-name-max: 720px;
   --size-icon-button: 32px;
   --size-icon-glyph: 16px;
+  --size-category-column: 280px;
   --size-catalog-arrow-width: 18px;
   --size-brand-search-min: 260px;
   --size-brand-search-max: 360px;

@@ -61,12 +61,12 @@ export function renderSearchPanel({
   `;
 }
 
-export function renderIconButton({ type, action, id, title, ariaLabel }) {
+export function renderIconButton({ type, action, id, title, ariaLabel, dataAttribute = 'data-brand-id' }) {
   const icon = iconPaths[type] || iconPaths.search;
   const variantClass = type === 'delete' ? ' danger' : type === 'edit' ? ' edit' : '';
 
   return `
-    <button class="icon-button${variantClass}" data-action="${escapeHtml(action)}" data-brand-id="${escapeHtml(id)}" type="button" title="${escapeHtml(title)}" aria-label="${escapeHtml(ariaLabel)}">
+    <button class="icon-button${variantClass}" data-action="${escapeHtml(action)}" ${escapeHtml(dataAttribute)}="${escapeHtml(id)}" type="button" title="${escapeHtml(title)}" aria-label="${escapeHtml(ariaLabel)}">
       <svg viewBox="0 0 24 24" aria-hidden="true">
         ${icon}
       </svg>
@@ -74,23 +74,38 @@ export function renderIconButton({ type, action, id, title, ariaLabel }) {
   `;
 }
 
-export function renderAdminTable({ columns, rows, emptyState, renderActions, getRowAttributes = () => '' }) {
+export function renderAdminTable({
+  columns,
+  rows,
+  emptyState,
+  renderActions,
+  renderCells,
+  getRowAttributes = () => '',
+  tableClass = 'admin-brand-table',
+  rowClass = 'admin-brand-table-row',
+}) {
   if (!rows.length) return emptyState;
 
   return `
-    <div class="admin-brand-table">
-      <div class="admin-brand-table-row header">
+    <div class="${tableClass}">
+      <div class="${rowClass} header">
         ${columns.map((column) => `<span>${escapeHtml(column.label)}</span>`).join('')}
       </div>
       ${rows
         .map(
           (row) => `
-            <div class="admin-brand-table-row"${getRowAttributes(row)}>
-              <span class="mono">${escapeHtml(row.id)}</span>
-              <strong>${escapeHtml(row.name)}</strong>
-              <span class="admin-table-actions">
-                ${renderActions(row)}
-              </span>
+            <div class="${rowClass}"${getRowAttributes(row)}>
+              ${
+                renderCells
+                  ? renderCells(row)
+                  : `
+                    <span class="mono">${escapeHtml(row.id)}</span>
+                    <strong>${escapeHtml(row.name)}</strong>
+                    <span class="admin-table-actions">
+                      ${renderActions(row)}
+                    </span>
+                  `
+              }
             </div>
           `,
         )

@@ -1,7 +1,7 @@
 import { activateNav, setPage, setStatus } from './ui.js';
 import { renderAdminBrandsPage, renderBrandsPage } from './views/brands.js';
 import { renderBrandProductsPage } from './views/brandProducts.js';
-import { renderCategoriesPage } from './views/categories.js';
+import { renderAdminCategoriesPage, renderCategoriesPage } from './views/categories.js';
 import { renderHomePage } from './views/home.js';
 import { renderProductDetailPage } from './views/productDetail.js';
 import { renderProductsPage } from './views/products.js';
@@ -14,7 +14,7 @@ const routes = [
   { pattern: /^\/products\/(\d+)$/, render: ([productId]) => renderProductDetailPage(Number(productId)) },
   { pattern: /^\/categories$/, render: renderCategoriesPage },
   { pattern: /^\/admin\/brands$/, render: renderAdminBrandsPage },
-  { pattern: /^\/admin\/categories$/, render: renderCategoriesPage },
+  { pattern: /^\/admin\/categories$/, render: renderAdminCategoriesPage },
 ];
 
 function matchRoute(pathname) {

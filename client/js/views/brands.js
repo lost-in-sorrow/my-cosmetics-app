@@ -1,47 +1,21 @@
+import {
+  renderAdminTable,
+  renderCountBadge,
+  renderIconButton,
+  renderPageHeader,
+  renderSearchPanel,
+} from '../components/uiComponents.js';
 import { api } from '../api.js';
-import { chips, emptyState, escapeHtml, formToObject, setPage } from '../ui.js';
-
-function firstCharacter(name) {
-  return String(name || '').trim().charAt(0);
-}
-
-function brandSortBucket(name) {
-  const first = firstCharacter(name);
-  if (!first) return 0;
-  if (/\d/.test(first)) return 1;
-  if (/[A-Za-z]/.test(first)) return 2;
-  if (/[А-Яа-яЁё]/.test(first)) return 3;
-  return 0;
-}
-
-function groupKey(name) {
-  const first = firstCharacter(name);
-  if (!first || brandSortBucket(name) < 2) return '#';
-  return first.toUpperCase();
-}
-
-function compareBrandNames(a, b) {
-  const bucketDiff = brandSortBucket(a.name) - brandSortBucket(b.name);
-  if (bucketDiff) return bucketDiff;
-  return a.name.localeCompare(b.name, ['en', 'ru'], { numeric: true, sensitivity: 'base' });
-}
-
-function compareGroupKeys(a, b) {
-  if (a === '#') return b === '#' ? 0 : -1;
-  if (b === '#') return 1;
-  const aLatin = /^[A-Z]$/.test(a);
-  const bLatin = /^[A-Z]$/.test(b);
-  if (aLatin !== bLatin) return aLatin ? -1 : 1;
-  return a.localeCompare(b, ['en', 'ru'], { sensitivity: 'base' });
-}
+import { emptyState, escapeHtml, formToObject, setPage } from '../ui.js';
+import { compareAlphabetItems, compareCatalogNames, getAlphabetItems, getSortGroup } from '../shared/sort.js';
 
 function sortedBrands(brands) {
-  return [...brands].sort(compareBrandNames);
+  return [...brands].sort((a, b) => compareCatalogNames(a.name, b.name));
 }
 
 function groupBrands(brands) {
   return sortedBrands(brands).reduce((groups, brand) => {
-    const letter = groupKey(brand.name);
+    const letter = getSortGroup(brand.name).key;
     groups[letter] = groups[letter] || [];
     groups[letter].push(brand);
     return groups;
@@ -49,7 +23,7 @@ function groupBrands(brands) {
 }
 
 function sortedGroupKeys(groups) {
-  return Object.keys(groups).sort(compareGroupKeys);
+  return Object.keys(groups).sort(compareAlphabetItems);
 }
 
 function renderAlphabet(letters) {
@@ -94,45 +68,28 @@ function renderGroups(groups, { showId = false, dense = false, showLetters = tru
 }
 
 function renderAdminBrandTable(brands) {
-  const items = sortedBrands(brands);
-  if (!items.length) return emptyState('Брендов пока нет');
-
-  return `
-    <div class="admin-brand-table">
-      <div class="admin-brand-table-row header">
-        <span>ID</span>
-        <span>Название</span>
-        <span>Действия</span>
-      </div>
-      ${items
-        .map(
-          (brand) => `
-            <div class="admin-brand-table-row" data-brand-row data-brand-id="${brand.id}" data-brand-name="${escapeHtml(brand.name.toLowerCase())}">
-              <span class="mono">${brand.id}</span>
-              <strong>${escapeHtml(brand.name)}</strong>
-              <span class="admin-table-actions">
-                <button class="icon-button edit" data-action="brand-edit-row" data-brand-id="${brand.id}" type="button" title="Редактировать" aria-label="Редактировать бренд ${escapeHtml(brand.name)}">
-                  <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M4 20h4l10.7-10.7a2.1 2.1 0 0 0 0-3L17.7 5.3a2.1 2.1 0 0 0-3 0L4 16v4Z" />
-                    <path d="m13.8 6.2 4 4" />
-                  </svg>
-                </button>
-                <button class="icon-button danger" data-action="brand-delete-row" data-brand-id="${brand.id}" type="button" title="Удалить" aria-label="Удалить бренд ${escapeHtml(brand.name)}">
-                  <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M5 7h14" />
-                    <path d="M10 11v6" />
-                    <path d="M14 11v6" />
-                    <path d="M9 7V5h6v2" />
-                    <path d="m7 7 1 13h8l1-13" />
-                  </svg>
-                </button>
-              </span>
-            </div>
-          `,
-        )
-        .join('')}
-    </div>
-  `;
+  return renderAdminTable({
+    columns: [{ label: 'ID' }, { label: 'Название' }, { label: 'Действия' }],
+    rows: sortedBrands(brands),
+    emptyState: emptyState('Брендов пока нет'),
+    getRowAttributes: (brand) => ` data-brand-row data-brand-id="${brand.id}" data-brand-name="${escapeHtml(brand.name.toLowerCase())}"`,
+    renderActions: (brand) => `
+      ${renderIconButton({
+        type: 'edit',
+        action: 'brand-edit-row',
+        id: brand.id,
+        title: 'Редактировать',
+        ariaLabel: `Редактировать бренд ${brand.name}`,
+      })}
+      ${renderIconButton({
+        type: 'delete',
+        action: 'brand-delete-row',
+        id: brand.id,
+        title: 'Удалить',
+        ariaLabel: `Удалить бренд ${brand.name}`,
+      })}
+    `,
+  });
 }
 
 function bindSearch(brands) {
@@ -246,25 +203,19 @@ function bindBrandCrud(load, brands = []) {
 export async function renderBrandsPage() {
   const brands = await api.getBrands();
   const groups = groupBrands(brands);
-  const letters = sortedGroupKeys(groups);
+  const letters = getAlphabetItems(brands, (brand) => brand.name);
 
   setPage(`
     <section class="page brand-catalog-page">
-      <header class="page-header">
-        <div>
-          <h1>Каталог брендов</h1>
-        </div>
-        ${chips([`${brands.length} брендов`])}
-      </header>
+      ${renderPageHeader({ title: 'Каталог брендов', countLabel: `${brands.length} брендов` })}
 
       <section class="brand-catalog-tools">
-        <div class="panel panel-body search-shell">
-          <label>
-            Поиск
-            <input class="search-input compact" id="brandSearch" type="search" placeholder="Введите минимум 2 символа" autocomplete="off" />
-          </label>
-          <div class="suggestions hidden" id="brandSuggestions"></div>
-        </div>
+        ${renderSearchPanel({
+          label: 'Поиск',
+          placeholder: 'Введите минимум 2 символа',
+          id: 'brandSearch',
+          extraHtml: '<div class="suggestions hidden" id="brandSuggestions"></div>',
+        })}
 
         <div class="panel panel-body alphabet-panel">
           ${renderAlphabet(letters)}
@@ -285,9 +236,7 @@ export async function renderAdminBrandsPage() {
 
   setPage(`
     <section class="page admin-brands-page">
-      <header class="page-header admin-page-header">
-        <h1>Администрирование брендов</h1>
-      </header>
+      ${renderPageHeader({ title: 'Администрирование брендов', className: 'page-header admin-page-header' })}
 
       <section class="admin-brand-forms">
         <form class="panel panel-body form admin-brand-form" data-form="brand-create">
@@ -298,10 +247,15 @@ export async function renderAdminBrandsPage() {
           </div>
         </form>
 
-        <div class="panel panel-body form admin-brand-form">
-          <h2>Поиск</h2>
-          <label>Название или ID <span class="admin-search-field"><input id="adminBrandSearch" type="search" placeholder="Введите название или ID" autocomplete="off" /></span></label>
-        </div>
+        ${renderSearchPanel({
+          label: 'Название или ID',
+          placeholder: 'Введите название или ID',
+          id: 'adminBrandSearch',
+          panelClass: 'panel panel-body form admin-brand-form',
+          inputClass: '',
+          title: 'Поиск',
+          withSearchIcon: true,
+        })}
       </section>
 
       <section class="panel panel-body form admin-brand-form admin-edit-panel hidden" data-panel="brand-edit">
@@ -319,7 +273,7 @@ export async function renderAdminBrandsPage() {
       <section class="admin-brand-list panel panel-body">
         <div class="admin-list-heading">
           <h2>Список брендов</h2>
-          ${chips([`${brands.length} всего`])}
+          ${renderCountBadge(`${brands.length} всего`)}
         </div>
         ${renderAdminBrandTable(brands)}
       </section>

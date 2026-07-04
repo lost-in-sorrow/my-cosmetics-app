@@ -136,3 +136,17 @@ Rules:
 - icon buttons must have title and aria-label;
 - action buttons should be visually centered;
 - text action buttons are avoided in dense tables.
+
+# Shared UI Components
+
+Reusable UI patterns should be extracted only after they stabilize on at least one real screen.
+
+Current shared patterns:
+
+- page header with count badge;
+- compact search panel;
+- admin table;
+- icon action buttons;
+- catalog name sorting.
+
+The goal is consistency across brands and categories without large frontend rewrites.

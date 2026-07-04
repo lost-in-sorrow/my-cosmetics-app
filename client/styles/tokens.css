@@ -1,16 +1,106 @@
 :root {
   color-scheme: dark;
+
   --bg: #09090d;
   --surface: #111118;
   --surface-2: #171722;
   --surface-3: #20202d;
+  --surface-sidebar: rgba(12, 12, 18, 0.96);
+  --surface-brand-mark: #171320;
+  --surface-product-image: #0d0d13;
+  --surface-input: #0c0c12;
+  --surface-suggestions: #101018;
+  --surface-chip: #14141d;
+  --surface-empty: rgba(255, 255, 255, 0.02);
   --border: #2b2b38;
+  --border-accent-soft: rgba(177, 132, 255, 0.42);
+  --border-accent: rgba(177, 132, 255, 0.58);
+  --border-accent-strong: rgba(177, 132, 255, 0.72);
+  --border-danger: rgba(255, 107, 138, 0.44);
   --text: #f3f0f7;
   --muted: #a39daf;
   --soft: #777085;
   --accent: #b184ff;
   --accent-2: #d8c4ff;
   --danger: #ff6b8a;
+  --danger-soft: #ffc3d0;
   --ok: #72d6a0;
+  --interactive-accent-bg: rgba(177, 132, 255, 0.12);
+  --interactive-accent-bg-strong: rgba(177, 132, 255, 0.16);
+  --focus-ring: rgba(177, 132, 255, 0.14);
+  --status-ok-ring: rgba(114, 214, 160, 0.13);
+  --status-error-ring: rgba(255, 107, 138, 0.13);
+
+  --font-family-base: Inter, "Segoe UI", Arial, sans-serif;
+  --font-size-xs: 12px;
+  --font-size-sm: 13px;
+  --font-size-md: 16px;
+  --font-size-lg: 18px;
+  --font-size-xl: 22px;
+  --font-size-2xl: 26px;
+  --font-size-brand-placeholder: 42px;
+  --font-size-page-title: clamp(34px, 5vw, 58px);
+  --font-weight-bold: 700;
+  --font-weight-extra-bold: 800;
+  --font-weight-black: 900;
+  --line-height-title: 0.98;
+  --letter-spacing-none: 0;
+  --letter-spacing-kicker: 0.08em;
+
+  --border-width: 1px;
+  --border-style: solid;
+  --border-style-dashed: dashed;
+  --radius-sm: 8px;
+  --radius-pill: 999px;
+  --radius-round: 50%;
+
   --shadow: 0 22px 60px rgba(0, 0, 0, 0.32);
+  --shadow-status-ok: 0 0 0 4px var(--status-ok-ring);
+  --shadow-status-error: 0 0 0 4px var(--status-error-ring);
+  --shadow-focus: 0 0 0 3px var(--focus-ring);
+
+  --space-0: 0;
+  --space-1: 2px;
+  --space-2: 3px;
+  --space-3: 4px;
+  --space-4: 6px;
+  --space-5: 7px;
+  --space-6: 8px;
+  --space-7: 9px;
+  --space-8: 10px;
+  --space-9: 11px;
+  --space-10: 12px;
+  --space-11: 13px;
+  --space-12: 14px;
+  --space-13: 16px;
+  --space-14: 18px;
+  --space-15: 20px;
+  --space-16: 22px;
+  --space-17: 24px;
+  --space-18: 28px;
+  --space-19: 32px;
+
+  --size-status-dot: 9px;
+  --size-brand-mark: 42px;
+  --size-button-min-height: 40px;
+  --size-control-min-height: 42px;
+  --size-search-min-height: 52px;
+  --size-letter-button-width: 36px;
+  --size-letter-button-min-height: 34px;
+  --size-product-image-height: 220px;
+  --size-page-max-width: 1320px;
+  --size-app-min-width: 320px;
+  --size-sidebar-width: 264px;
+  --size-detail-min: 280px;
+  --size-detail-max: 420px;
+  --size-catalog-card-min: 220px;
+  --breakpoint-tablet: 980px;
+  --breakpoint-mobile: 620px;
+  --grid-single-column: 1fr;
+
+  --duration-fast: 120ms;
+  --duration-base: 180ms;
+  --duration-slow: 240ms;
+
+  --z-index-dropdown: 10;
 }

@@ -1,25 +1,25 @@
 .app-shell {
   display: grid;
-  grid-template-columns: 264px minmax(0, 1fr);
+  grid-template-columns: var(--size-sidebar-width) minmax(var(--space-0), 1fr);
   min-height: 100vh;
 }
 
 .sidebar {
   position: sticky;
-  top: 0;
+  top: var(--space-0);
   height: 100vh;
   display: flex;
   flex-direction: column;
-  gap: 28px;
-  padding: 24px;
-  border-right: 1px solid var(--border);
-  background: rgba(12, 12, 18, 0.96);
+  gap: var(--space-18);
+  padding: var(--space-17);
+  border-right: var(--border-width) var(--border-style) var(--border);
+  background: var(--surface-sidebar);
 }
 
 .brand-lockup {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--space-10);
   text-decoration: none;
 }
 
@@ -29,118 +29,118 @@
 }
 
 .brand-lockup strong {
-  font-size: 18px;
-  letter-spacing: 0;
+  font-size: var(--font-size-lg);
+  letter-spacing: var(--letter-spacing-none);
 }
 
 .brand-lockup small {
-  margin-top: 2px;
+  margin-top: var(--space-1);
   color: var(--muted);
 }
 
 .brand-mark {
   display: grid;
-  width: 42px;
-  height: 42px;
+  width: var(--size-brand-mark);
+  height: var(--size-brand-mark);
   place-items: center;
-  border: 1px solid rgba(177, 132, 255, 0.42);
-  border-radius: 8px;
-  background: #171320;
+  border: var(--border-width) var(--border-style) var(--border-accent-soft);
+  border-radius: var(--radius-sm);
+  background: var(--surface-brand-mark);
   color: var(--accent-2);
-  font-weight: 900;
+  font-weight: var(--font-weight-black);
 }
 
 .nav {
   display: grid;
-  gap: 6px;
+  gap: var(--space-4);
 }
 
 .nav a {
-  border-radius: 8px;
-  padding: 11px 12px;
+  border-radius: var(--radius-sm);
+  padding: var(--space-9) var(--space-10);
   color: var(--muted);
   text-decoration: none;
 }
 
 .nav a:hover,
 .nav a.active {
-  background: rgba(177, 132, 255, 0.12);
+  background: var(--interactive-accent-bg);
   color: var(--accent-2);
 }
 
 .status-card {
   display: flex;
-  gap: 12px;
+  gap: var(--space-10);
   align-items: flex-start;
   margin-top: auto;
-  padding: 14px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
+  padding: var(--space-12);
+  border: var(--border-width) var(--border-style) var(--border);
+  border-radius: var(--radius-sm);
   background: var(--surface);
 }
 
 .status-card p {
-  margin: 4px 0 0;
+  margin: var(--space-3) var(--space-0) var(--space-0);
   color: var(--muted);
-  font-size: 13px;
+  font-size: var(--font-size-sm);
 }
 
 .status-dot {
-  width: 9px;
-  height: 9px;
-  margin-top: 6px;
-  border-radius: 50%;
+  width: var(--size-status-dot);
+  height: var(--size-status-dot);
+  margin-top: var(--space-4);
+  border-radius: var(--radius-round);
   background: var(--ok);
-  box-shadow: 0 0 0 4px rgba(114, 214, 160, 0.13);
+  box-shadow: var(--shadow-status-ok);
 }
 
 .status-dot.error {
   background: var(--danger);
-  box-shadow: 0 0 0 4px rgba(255, 107, 138, 0.13);
+  box-shadow: var(--shadow-status-error);
 }
 
 .workspace {
-  min-width: 0;
-  padding: 32px;
+  min-width: var(--space-0);
+  padding: var(--space-19);
 }
 
 .page {
   display: grid;
-  gap: 24px;
-  max-width: 1320px;
-  margin: 0 auto;
+  gap: var(--space-17);
+  max-width: var(--size-page-max-width);
+  margin: var(--space-0) auto;
 }
 
 .page-header {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  gap: 18px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid var(--border);
+  gap: var(--space-14);
+  padding-bottom: var(--space-15);
+  border-bottom: var(--border-width) var(--border-style) var(--border);
 }
 
 .grid {
   display: grid;
-  gap: 16px;
+  gap: var(--space-13);
 }
 
 .grid.two {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(var(--space-0), 1fr));
 }
 
 .grid.three {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(var(--space-0), 1fr));
 }
 
 .catalog-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(var(--size-catalog-card-min), 1fr));
+  gap: var(--space-13);
 }
 
 .detail-layout {
   display: grid;
-  grid-template-columns: minmax(280px, 420px) minmax(0, 1fr);
-  gap: 18px;
+  grid-template-columns: minmax(var(--size-detail-min), var(--size-detail-max)) minmax(var(--space-0), 1fr);
+  gap: var(--space-14);
 }

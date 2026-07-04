@@ -3,7 +3,7 @@
   .detail-layout,
   .grid.two,
   .grid.three {
-    grid-template-columns: 1fr;
+    grid-template-columns: var(--grid-single-column);
   }
 
   .sidebar {
@@ -12,7 +12,7 @@
   }
 
   .workspace {
-    padding: 22px;
+    padding: var(--space-16);
   }
 }
 
@@ -23,6 +23,6 @@
   .form-row {
     align-items: stretch;
     flex-direction: column;
-    grid-template-columns: 1fr;
+    grid-template-columns: var(--grid-single-column);
   }
 }

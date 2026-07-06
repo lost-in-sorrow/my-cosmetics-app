@@ -23,15 +23,6 @@ function categoryMaps(categories) {
 
 const categoryCascadeRowStep = 36;
 
-function renderCategoryProductsSlot(category, { level, offset }) {
-  return `
-    <aside class="category-products-slot" style="--category-column-offset: ${offset}px; --category-column-level: ${level}" aria-label="Товары категории">
-      <div class="category-products-slot-title">Товары</div>
-      <div class="category-products-slot-name">${escapeHtml(category.name)}</div>
-    </aside>
-  `;
-}
-
 function renderCategoryColumn(items, { level, offset, selectedId, selectedPathIds, childrenByParentId }) {
   return `
     <div class="category-column" data-category-column="${level}" style="--category-column-offset: ${offset}px; --category-column-level: ${level}">
@@ -66,7 +57,6 @@ function renderCategoryColumns(categories, selectedPath = []) {
   const { childrenByParentId } = categoryMaps(categories);
   const selectedPathIds = new Set(selectedPath.map((category) => category.id));
   const selectedId = selectedPath.at(-1)?.id;
-  const selectedCategory = selectedPath.at(-1);
   const columns = [];
   let parentKey = 'root';
   let level = 0;
@@ -83,10 +73,6 @@ function renderCategoryColumns(categories, selectedPath = []) {
     offset += Math.max(selectedIndex, 0) * categoryCascadeRowStep;
     parentKey = String(selected.id);
     level += 1;
-  }
-
-  if (selectedCategory && !childrenByParentId[String(selectedCategory.id)]?.length) {
-    columns.push(renderCategoryProductsSlot(selectedCategory, { level, offset }));
   }
 
   return columns.join('');
@@ -206,11 +192,19 @@ function renderAdminCategoryTable(categories) {
 }
 
 function bindCategoryCatalog(categories) {
-  const { byId } = categoryMaps(categories);
+  const { byId, childrenByParentId } = categoryMaps(categories);
   const root = document.querySelector('[data-category-catalog]');
   const search = document.querySelector('#categorySearch');
   let selectedPath = [];
   let shouldFocusSelected = false;
+
+  function selectCategory(category) {
+    selectedPath = getCategoryPath(category, byId);
+    const hasChildren = Boolean(childrenByParentId[String(category.id)]?.length);
+    if (hasChildren) return;
+
+    // TODO: navigate to the category products view when a supported category filter route exists.
+  }
 
   function render() {
     root.innerHTML = renderCategoryTree(categories, selectedPath, search.value);
@@ -225,7 +219,7 @@ function bindCategoryCatalog(categories) {
     if (!button) return;
     const category = byId.get(Number(button.dataset.categoryId));
     if (!category) return;
-    selectedPath = getCategoryPath(category, byId);
+    selectCategory(category);
     shouldFocusSelected = Boolean(search.value.trim());
     search.value = '';
     render();

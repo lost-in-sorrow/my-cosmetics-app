@@ -21,55 +21,55 @@ function categoryMaps(categories) {
   };
 }
 
-function renderCategoryTreeRows(items, { level = 0, selectedId, selectedPathIds, childrenByParentId, expandedIds }) {
-  return items
-    .map((category) => {
-      const children = childrenByParentId[String(category.id)] || [];
-      const hasChildren = Boolean(children.length);
-      const isExpanded = expandedIds.has(category.id);
-      const isSelected = category.id === selectedId;
-      const isInPath = selectedPathIds.has(category.id);
+function renderCategoryColumn(items, { level, selectedId, selectedPathIds, childrenByParentId }) {
+  return `
+    <div class="category-column" data-category-column="${level}">
+      <div class="category-column-body">
+        ${items
+          .map((category) => {
+            const children = childrenByParentId[String(category.id)] || [];
+            const hasChildren = Boolean(children.length);
+            const isSelected = category.id === selectedId;
+            const isInPath = selectedPathIds.has(category.id);
+            const stateClass = isSelected ? 'active' : isInPath ? 'in-path' : '';
 
-      return `
-        <div class="category-tree-item" style="--category-level: ${level}">
-          <div class="category-tree-line" aria-hidden="true"></div>
-          ${
-            hasChildren
-              ? `
-                <button
-                  class="category-tree-toggle ${isExpanded ? 'expanded' : ''}"
-                  data-category-toggle="${category.id}"
-                  type="button"
-                  aria-label="${isExpanded ? 'Свернуть' : 'Раскрыть'} ${escapeHtml(category.name)}"
-                >
-                  <span class="category-row-arrow"></span>
-                </button>
-              `
-              : '<span class="category-tree-toggle-spacer" aria-hidden="true"></span>'
-          }
-          <button
-            class="category-tree-row ${isSelected ? 'active' : ''} ${isInPath ? 'in-path' : ''}"
-            data-category-id="${category.id}"
-            type="button"
-            ${isSelected ? 'aria-current="true"' : ''}
-          >
-            <span class="category-tree-node-name">${escapeHtml(category.name)}</span>
-            ${hasChildren ? `<span class="category-tree-child-count">${children.length}</span>` : '<span class="category-row-spacer"></span>'}
-          </button>
-        </div>
-        ${hasChildren && isExpanded ? renderCategoryTreeRows(children, { level: level + 1, selectedId, selectedPathIds, childrenByParentId, expandedIds }) : ''}
-      `;
-    })
-    .join('');
+            return `
+              <button
+                class="category-tree-row ${stateClass} ${hasChildren ? 'has-children' : 'is-leaf'}"
+                data-category-id="${category.id}"
+                type="button"
+                ${isSelected ? 'aria-current="true"' : ''}
+              >
+                <span class="category-tree-node-name">${escapeHtml(category.name)}</span>
+                ${hasChildren ? '<span class="category-row-arrow" aria-hidden="true"></span>' : '<span class="category-row-leaf" aria-hidden="true"></span>'}
+              </button>
+            `;
+          })
+          .join('')}
+      </div>
+    </div>
+  `;
 }
 
-function renderCategoryHierarchy(categories, selectedPath = [], expandedIds = new Set()) {
+function renderCategoryColumns(categories, selectedPath = []) {
   const { childrenByParentId } = categoryMaps(categories);
   const selectedPathIds = new Set(selectedPath.map((category) => category.id));
-  const roots = childrenByParentId.root || [];
   const selectedId = selectedPath.at(-1)?.id;
+  const columns = [];
+  let parentKey = 'root';
+  let level = 0;
 
-  return renderCategoryTreeRows(roots, { selectedId, selectedPathIds, childrenByParentId, expandedIds });
+  while (childrenByParentId[parentKey]?.length) {
+    columns.push(renderCategoryColumn(childrenByParentId[parentKey], { level, selectedId, selectedPathIds, childrenByParentId }));
+
+    const selected = selectedPath[level];
+    if (!selected) break;
+
+    parentKey = String(selected.id);
+    level += 1;
+  }
+
+  return columns.join('');
 }
 
 function renderCategoryBreadcrumb(selectedPath = []) {
@@ -111,7 +111,7 @@ function renderSearchResults(matches, byId) {
   `;
 }
 
-function renderCategoryTree(categories, selectedPath = [], searchValue = '', expandedIds = new Set()) {
+function renderCategoryTree(categories, selectedPath = [], searchValue = '') {
   const { byId } = categoryMaps(categories);
   const query = searchValue.trim().toLowerCase();
 
@@ -131,9 +131,7 @@ function renderCategoryTree(categories, selectedPath = [], searchValue = '', exp
         : ''
     }
     <div class="category-tree-shell">
-      <div class="category-tree-list">
-        ${renderCategoryHierarchy(categories, selectedPath, expandedIds)}
-      </div>
+      ${renderCategoryColumns(categories, selectedPath)}
     </div>
   `;
 }
@@ -188,47 +186,26 @@ function renderAdminCategoryTable(categories) {
 }
 
 function bindCategoryCatalog(categories) {
-  const { byId, childrenByParentId } = categoryMaps(categories);
+  const { byId } = categoryMaps(categories);
   const root = document.querySelector('[data-category-catalog]');
   const search = document.querySelector('#categorySearch');
   let selectedPath = [];
   let shouldFocusSelected = false;
-  const expandedIds = new Set();
 
   function render() {
-    root.innerHTML = renderCategoryTree(categories, selectedPath, search.value, expandedIds);
+    root.innerHTML = renderCategoryTree(categories, selectedPath, search.value);
     if (!shouldFocusSelected) return;
 
     root.querySelector('.category-tree-row.active')?.scrollIntoView({ block: 'nearest' });
     shouldFocusSelected = false;
   }
 
-  function expandPath(path) {
-    path.slice(0, -1).forEach((category) => expandedIds.add(category.id));
-  }
-
   root.addEventListener('click', (event) => {
-    const toggle = event.target.closest('[data-category-toggle]');
-    if (toggle) {
-      const categoryId = Number(toggle.dataset.categoryToggle);
-      if (expandedIds.has(categoryId)) {
-        expandedIds.delete(categoryId);
-      } else {
-        expandedIds.add(categoryId);
-      }
-      render();
-      return;
-    }
-
     const button = event.target.closest('[data-category-id]');
     if (!button) return;
     const category = byId.get(Number(button.dataset.categoryId));
     if (!category) return;
     selectedPath = getCategoryPath(category, byId);
-    expandPath(selectedPath);
-    if (childrenByParentId[String(category.id)]?.length) {
-      expandedIds.add(category.id);
-    }
     shouldFocusSelected = Boolean(search.value.trim());
     search.value = '';
     render();

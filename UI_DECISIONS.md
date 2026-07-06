@@ -1,198 +1,236 @@
 # UI Decisions
 
-## Overall philosophy
+# Общая философия
 
-The application is designed primarily for desktop use.
+Приложение проектируется в первую очередь для использования на настольных компьютерах.
 
-Priority:
+Приоритеты:
 
-1. Usability
-2. Simplicity
-3. Consistency
-4. Visual appearance
+1. Удобство использования
+2. Простота
+3. Последовательность
+4. Визуальная привлекательность
 
-Visual redesign should never reduce usability.
+Любые визуальные изменения не должны ухудшать удобство работы.
 
 ---
 
-# Navigation
+# Навигация
 
-Main navigation:
+Основная навигация:
 
-- Категории
-- Продукты
-- Бренды
+- Каталог категорий
+- Каталог продуктов
+- Каталог брендов
 
 ▼ Администрирование
+
 - Бренды
 - Категории
 - OpenAPI
 
-The "Variants" section has been removed from navigation.
+Раздел «Варианты» удалён из навигации.
 
-Variants are managed only inside Product pages.
-
----
-
-# Working pages vs Administration
-
-Working pages are intended for everyday work.
-
-They should contain only actions required during normal usage.
-
-Administration pages contain:
-
-- create
-- edit
-- delete
-- configuration
-
-Administrative actions should not appear on working pages.
+Варианты управляются только внутри страниц продуктов.
 
 ---
 
-# Brand Catalog
+# Рабочие страницы и администрирование
 
-Purpose:
+Рабочие страницы предназначены для повседневной работы пользователей.
 
-Browse and select brands.
+Они должны содержать только действия, необходимые в обычном рабочем процессе.
 
-Contains:
+Страницы администрирования содержат:
 
-- search
-- alphabetical navigation
-- brand list
+- создание;
+- редактирование;
+- удаление;
+- настройки.
 
-Does NOT contain:
-
-- create
-- edit
-- delete
-- ID display
-
-These functions belong only to:
-
-Администрирование → Бренды
+Административные действия не должны отображаться на рабочих страницах.
 
 ---
 
-# Brand sorting
+# Каталог брендов
 
-Sorting order:
+Назначение:
 
-1. Symbols
-2. Numbers
-3. Latin alphabet
-4. Cyrillic alphabet
+Просмотр и выбор брендов.
 
-This rule should be consistent across the application.
+Содержит:
 
----
+- поиск;
+- алфавитную навигацию;
+- список брендов.
 
-# Layout
+Не содержит:
 
-Desktop-first.
+- создание;
+- редактирование;
+- удаление;
+- отображение ID.
 
-Interfaces should:
+Все административные операции выполняются только через:
 
-- use available horizontal space;
-- avoid excessive scrolling;
-- remain compact;
-- avoid oversized controls.
-
-Lists should be compact and easy to scan.
+**Администрирование → Бренды**
 
 ---
 
-# Future principles
+# Сортировка брендов
 
-Do not add interface elements "for future use".
+Порядок сортировки:
 
-If there is only one available action or sorting mode, do not display controls suggesting multiple choices.
+1. Символы
+2. Цифры
+3. Латиница
+4. Кириллица
 
-Every visible control should provide actual value to the user.
+Это правило должно использоваться во всём приложении.
 
-# Brand Administration Editing
+---
 
-The brand administration page should not show a permanent edit form by default.
+# Макет интерфейса
 
-Rules:
+Подход — Desktop First.
 
-- creation is available as a compact form;
-- search is visible near creation controls;
-- editing is initiated from a table row;
-- edit UI appears only after selecting a brand;
-- row actions use compact icon buttons with accessible labels;
-- text action buttons should be avoided in dense admin tables.
+Интерфейсы должны:
 
-# Admin Table Actions
+- эффективно использовать горизонтальное пространство;
+- минимизировать вертикальную прокрутку;
+- оставаться компактными;
+- избегать чрезмерно крупных элементов управления.
 
-Administrative table actions should use compact icon buttons.
+Списки должны быть компактными и легко просматриваться.
 
-Rules:
+---
 
-- edit action uses a pencil icon;
-- delete action uses a trash icon;
-- icon buttons must have title and aria-label;
-- action buttons should be visually centered;
-- text action buttons are avoided in dense tables.
+# Будущие возможности
 
-# Shared UI Components
+Не добавлять элементы интерфейса «на будущее».
 
-Reusable UI patterns should be extracted only after they stabilize on at least one real screen.
+Если доступен только один вариант действия или сортировки — не отображать элементы управления, создающие впечатление выбора.
 
-Current shared patterns:
+Каждый элемент интерфейса должен приносить реальную пользу пользователю.
 
-- page header with count badge;
-- compact search panel;
-- admin table;
-- icon action buttons;
-- catalog name sorting.
+---
 
-The goal is consistency across brands and categories without large frontend rewrites.
+# Администрирование брендов
 
-# Category Navigation
+Страница администрирования брендов не должна постоянно отображать форму редактирования.
 
-The category catalog uses a hierarchical navigation model rather than a flat list.
+Правила:
 
-Working page purpose:
+- создание выполняется через компактную форму;
+- поиск расположен рядом с формой создания;
+- редактирование начинается после выбора строки;
+- интерфейс редактирования появляется только после выбора бренда;
+- действия в таблице представлены компактными кнопками-иконками;
+- текстовые кнопки действий в плотных административных таблицах использовать не следует.
 
-- browse the category hierarchy;
-- quickly navigate between nesting levels;
-- select a category.
+---
 
-Interaction principles:
+# Действия в административных таблицах
 
-- root categories are displayed first;
-- selecting a category reveals its child categories in the next adjacent column;
-- each subsequent level appears in the next column;
-- the implementation must support arbitrary nesting depth and must not rely on a fixed number of columns;
-- if the hierarchy exceeds the available width, horizontal scrolling within the hierarchy area is acceptable.
+Для действий используются компактные кнопки с иконками.
 
-Search behavior:
+Правила:
 
-- search is available at the top of the page;
-- search does not replace the hierarchy;
-- search is a navigation aid, not an alternative page mode.
+- редактирование — иконка карандаша;
+- удаление — иконка корзины;
+- все кнопки должны иметь `title` и `aria-label`;
+- кнопки визуально выравниваются по центру;
+- текстовые кнопки в компактных таблицах не используются.
 
-The working category page must not contain:
+---
 
-- create;
-- edit;
-- delete;
-- ID display;
-- parent_id display.
+# Общие UI-компоненты
 
-# Category Catalog Visual Behavior
+Повторно используемые компоненты следует выделять только после того, как они стабилизировались хотя бы на одном реальном экране.
 
-The category catalog should behave like a desktop mega menu, not like a table.
+Текущие общие шаблоны:
 
-Rules:
+- заголовок страницы со счётчиком;
+- компактная панель поиска;
+- административная таблица;
+- кнопки действий с иконками;
+- сортировка каталогов по имени.
 
-- each hierarchy level is displayed as a separate adjacent column;
-- category rows are navigation items;
-- categories with children show a chevron;
-- selected category and selected path must be visually clear;
-- columns must be visually separated;
-- breadcrumb/path should show the current selected category chain;
-- search results should show category paths and allow opening the matching category in the hierarchy.
+Цель — обеспечить единообразие интерфейса без масштабных переработок фронтенда.
+
+---
+
+# Каталог категорий
+
+Каталог категорий использует иерархическую модель навигации.
+
+Назначение страницы:
+
+- просмотр структуры категорий;
+- навигация по иерархии;
+- выбор категории.
+
+Рабочая страница не должна содержать:
+
+- создание;
+- редактирование;
+- удаление;
+- отображение ID;
+- отображение parent_id.
+
+Все административные операции выполняются только через раздел администрирования.
+
+---
+
+# Отображение иерархических данных
+
+Иерархические структуры (категории, группы, разделы и т.п.) должны отображаться так, чтобы пользователь без дополнительных действий понимал:
+
+- уровень вложенности;
+- родительские элементы;
+- дочерние элементы;
+- текущий выбранный элемент;
+- полный путь до выбранного элемента.
+
+### Предпочтительное представление
+
+Для desktop-интерфейсов предпочтительным является классическое вертикальное дерево.
+
+Дерево должно обеспечивать:
+
+- хорошо различимые уровни вложенности;
+- раскрытие и сворачивание узлов;
+- явное выделение выбранного элемента;
+- подсветку цепочки родителей;
+- стабильную структуру без визуальных скачков при раскрытии дерева.
+
+Использование горизонтальных каскадных меню (mega menu, fly-out menu и аналогичных решений) для больших иерархий не рекомендуется, поскольку они ухудшают читаемость структуры и усложняют навигацию.
+
+---
+
+# Поиск в иерархии
+
+Поиск является вспомогательным инструментом навигации и не заменяет само дерево.
+
+Правила:
+
+- поиск расположен в верхней части страницы;
+- результаты отображают полный путь до категории;
+- выбор результата автоматически раскрывает дерево до нужного узла;
+- найденная категория становится активной;
+- пользователь не должен терять контекст после перехода из поиска.
+
+---
+
+# UX-принципы для дерева
+
+Работа с деревом должна минимизировать потерю контекста.
+
+Раскрытие узлов не должно:
+
+- ломать макет страницы;
+- смещать основную рабочую область;
+- затруднять понимание текущего положения пользователя.
+
+Основные действия (просмотр, навигация, выбор категории) должны оставаться одинаково удобными независимо от глубины вложенности дерева.
+

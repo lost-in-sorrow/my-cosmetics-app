@@ -21,42 +21,55 @@ function categoryMaps(categories) {
   };
 }
 
-function renderCategoryColumn(items, { level, selectedId, selectedPathIds, childrenByParentId }) {
-  return `
-    <div class="category-column" data-category-column="${level}">
-      ${items
-        .map((category) => {
-          const hasChildren = Boolean(childrenByParentId[String(category.id)]?.length);
-          const isSelected = category.id === selectedId;
-          const isInPath = selectedPathIds.has(category.id);
-          return `
-            <button class="category-tree-row ${isSelected ? 'active' : ''} ${isInPath ? 'in-path' : ''}" data-category-id="${category.id}" type="button">
-              <span>${escapeHtml(category.name)}</span>
-              ${hasChildren ? '<span class="category-row-arrow">></span>' : '<span class="category-row-spacer"></span>'}
-            </button>
-          `;
-        })
-        .join('')}
-    </div>
-  `;
+function renderCategoryTreeRows(items, { level = 0, selectedId, selectedPathIds, childrenByParentId, expandedIds }) {
+  return items
+    .map((category) => {
+      const children = childrenByParentId[String(category.id)] || [];
+      const hasChildren = Boolean(children.length);
+      const isExpanded = expandedIds.has(category.id);
+      const isSelected = category.id === selectedId;
+      const isInPath = selectedPathIds.has(category.id);
+
+      return `
+        <div class="category-tree-item" style="--category-level: ${level}">
+          <div class="category-tree-line" aria-hidden="true"></div>
+          ${
+            hasChildren
+              ? `
+                <button
+                  class="category-tree-toggle ${isExpanded ? 'expanded' : ''}"
+                  data-category-toggle="${category.id}"
+                  type="button"
+                  aria-label="${isExpanded ? 'Свернуть' : 'Раскрыть'} ${escapeHtml(category.name)}"
+                >
+                  <span class="category-row-arrow"></span>
+                </button>
+              `
+              : '<span class="category-tree-toggle-spacer" aria-hidden="true"></span>'
+          }
+          <button
+            class="category-tree-row ${isSelected ? 'active' : ''} ${isInPath ? 'in-path' : ''}"
+            data-category-id="${category.id}"
+            type="button"
+            ${isSelected ? 'aria-current="true"' : ''}
+          >
+            <span class="category-tree-node-name">${escapeHtml(category.name)}</span>
+            ${hasChildren ? `<span class="category-tree-child-count">${children.length}</span>` : '<span class="category-row-spacer"></span>'}
+          </button>
+        </div>
+        ${hasChildren && isExpanded ? renderCategoryTreeRows(children, { level: level + 1, selectedId, selectedPathIds, childrenByParentId, expandedIds }) : ''}
+      `;
+    })
+    .join('');
 }
 
-function renderCategoryColumns(categories, selectedPath = []) {
+function renderCategoryHierarchy(categories, selectedPath = [], expandedIds = new Set()) {
   const { childrenByParentId } = categoryMaps(categories);
-  const columns = [];
   const selectedPathIds = new Set(selectedPath.map((category) => category.id));
-  let parentKey = 'root';
-  let level = 0;
+  const roots = childrenByParentId.root || [];
+  const selectedId = selectedPath.at(-1)?.id;
 
-  while (childrenByParentId[parentKey]?.length) {
-    const selected = selectedPath[level];
-    columns.push(renderCategoryColumn(childrenByParentId[parentKey], { level, selectedId: selected?.id, selectedPathIds, childrenByParentId }));
-    if (!selected) break;
-    parentKey = String(selected.id);
-    level += 1;
-  }
-
-  return columns.join('');
+  return renderCategoryTreeRows(roots, { selectedId, selectedPathIds, childrenByParentId, expandedIds });
 }
 
 function renderCategoryBreadcrumb(selectedPath = []) {
@@ -98,24 +111,29 @@ function renderSearchResults(matches, byId) {
   `;
 }
 
-function renderCategoryTree(categories, selectedPath = [], searchValue = '') {
+function renderCategoryTree(categories, selectedPath = [], searchValue = '', expandedIds = new Set()) {
   const { byId } = categoryMaps(categories);
   const query = searchValue.trim().toLowerCase();
 
   if (!categories.length) return emptyState('Категорий пока нет');
 
-  if (query) {
-    const matches = sortedCategories(categories).filter((category) => category.name.toLowerCase().includes(query));
-    return `
-      ${renderCategoryBreadcrumb(selectedPath)}
-      ${renderSearchResults(matches, byId)}
-    `;
-  }
+  const matches = query ? sortedCategories(categories).filter((category) => category.name.toLowerCase().includes(query)) : [];
 
   return `
     ${renderCategoryBreadcrumb(selectedPath)}
+    ${
+      query
+        ? `
+          <section class="category-search-results-shell" aria-label="Результаты поиска">
+            ${renderSearchResults(matches, byId)}
+          </section>
+        `
+        : ''
+    }
     <div class="category-tree-shell">
-      ${renderCategoryColumns(categories, selectedPath)}
+      <div class="category-tree-list">
+        ${renderCategoryHierarchy(categories, selectedPath, expandedIds)}
+      </div>
     </div>
   `;
 }
@@ -170,21 +188,48 @@ function renderAdminCategoryTable(categories) {
 }
 
 function bindCategoryCatalog(categories) {
-  const { byId } = categoryMaps(categories);
+  const { byId, childrenByParentId } = categoryMaps(categories);
   const root = document.querySelector('[data-category-catalog]');
   const search = document.querySelector('#categorySearch');
   let selectedPath = [];
+  let shouldFocusSelected = false;
+  const expandedIds = new Set();
 
   function render() {
-    root.innerHTML = renderCategoryTree(categories, selectedPath, search.value);
+    root.innerHTML = renderCategoryTree(categories, selectedPath, search.value, expandedIds);
+    if (!shouldFocusSelected) return;
+
+    root.querySelector('.category-tree-row.active')?.scrollIntoView({ block: 'nearest' });
+    shouldFocusSelected = false;
+  }
+
+  function expandPath(path) {
+    path.slice(0, -1).forEach((category) => expandedIds.add(category.id));
   }
 
   root.addEventListener('click', (event) => {
+    const toggle = event.target.closest('[data-category-toggle]');
+    if (toggle) {
+      const categoryId = Number(toggle.dataset.categoryToggle);
+      if (expandedIds.has(categoryId)) {
+        expandedIds.delete(categoryId);
+      } else {
+        expandedIds.add(categoryId);
+      }
+      render();
+      return;
+    }
+
     const button = event.target.closest('[data-category-id]');
     if (!button) return;
     const category = byId.get(Number(button.dataset.categoryId));
     if (!category) return;
     selectedPath = getCategoryPath(category, byId);
+    expandPath(selectedPath);
+    if (childrenByParentId[String(category.id)]?.length) {
+      expandedIds.add(category.id);
+    }
+    shouldFocusSelected = Boolean(search.value.trim());
     search.value = '';
     render();
   });
@@ -267,17 +312,17 @@ export async function renderCategoriesPage() {
     <section class="page category-catalog-page">
       ${renderPageHeader({ title: 'Каталог категорий', countLabel: `${categories.length} категорий` })}
 
-      <section class="category-catalog panel">
+      <section class="category-catalog-tools">
         ${renderSearchPanel({
           label: 'Поиск',
           placeholder: 'Введите название категории',
           id: 'categorySearch',
-          panelClass: 'category-search-panel',
+          panelClass: 'panel panel-body search-shell category-search-panel',
         })}
+      </section>
 
-        <div class="category-catalog-browser" data-category-catalog>
-          ${renderCategoryTree(categories)}
-        </div>
+      <section class="category-catalog-browser" data-category-catalog>
+        ${renderCategoryTree(categories)}
       </section>
     </section>
   `);

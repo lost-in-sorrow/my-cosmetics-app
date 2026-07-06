@@ -21,9 +21,20 @@ function categoryMaps(categories) {
   };
 }
 
-function renderCategoryColumn(items, { level, selectedId, selectedPathIds, childrenByParentId }) {
+const categoryCascadeRowStep = 36;
+
+function renderCategoryProductsSlot(category, { level, offset }) {
   return `
-    <div class="category-column" data-category-column="${level}">
+    <aside class="category-products-slot" style="--category-column-offset: ${offset}px; --category-column-level: ${level}" aria-label="Товары категории">
+      <div class="category-products-slot-title">Товары</div>
+      <div class="category-products-slot-name">${escapeHtml(category.name)}</div>
+    </aside>
+  `;
+}
+
+function renderCategoryColumn(items, { level, offset, selectedId, selectedPathIds, childrenByParentId }) {
+  return `
+    <div class="category-column" data-category-column="${level}" style="--category-column-offset: ${offset}px; --category-column-level: ${level}">
       <div class="category-column-body">
         ${items
           .map((category) => {
@@ -55,18 +66,27 @@ function renderCategoryColumns(categories, selectedPath = []) {
   const { childrenByParentId } = categoryMaps(categories);
   const selectedPathIds = new Set(selectedPath.map((category) => category.id));
   const selectedId = selectedPath.at(-1)?.id;
+  const selectedCategory = selectedPath.at(-1);
   const columns = [];
   let parentKey = 'root';
   let level = 0;
+  let offset = 0;
 
   while (childrenByParentId[parentKey]?.length) {
-    columns.push(renderCategoryColumn(childrenByParentId[parentKey], { level, selectedId, selectedPathIds, childrenByParentId }));
+    const items = childrenByParentId[parentKey];
+    columns.push(renderCategoryColumn(items, { level, offset, selectedId, selectedPathIds, childrenByParentId }));
 
     const selected = selectedPath[level];
     if (!selected) break;
 
+    const selectedIndex = items.findIndex((category) => category.id === selected.id);
+    offset += Math.max(selectedIndex, 0) * categoryCascadeRowStep;
     parentKey = String(selected.id);
     level += 1;
+  }
+
+  if (selectedCategory && !childrenByParentId[String(selectedCategory.id)]?.length) {
+    columns.push(renderCategoryProductsSlot(selectedCategory, { level, offset }));
   }
 
   return columns.join('');

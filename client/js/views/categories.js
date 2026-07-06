@@ -5,6 +5,7 @@ import {
   renderPageHeader,
   renderSearchPanel,
 } from '../components/uiComponents.js';
+import { bindCategoryPickers, renderCategoryPicker } from '../components/categoryPicker.js';
 import { api } from '../api.js';
 import { emptyState, escapeHtml, formToObject, numberOrNull, setPage } from '../ui.js';
 import { buildCategoryTree, getCategoryPath } from '../shared/categoryTree.js';
@@ -142,33 +143,24 @@ function renderCategoryTree(categories, selectedPath = [], searchValue = '') {
   `;
 }
 
-function renderParentOptions(categories, selectedId = '') {
-  return `
-    <option value="">Нет</option>
-    ${sortedCategories(categories)
-      .map((category) => `<option value="${category.id}" ${String(category.id) === String(selectedId) ? 'selected' : ''}>${escapeHtml(category.name)}</option>`)
-      .join('')}
-  `;
-}
-
-function parentName(category, byId) {
-  return category.parent_id == null ? 'Нет' : byId.get(category.parent_id)?.name || `ID ${category.parent_id}`;
+function categoryFullPath(category, byId) {
+  return getCategoryPath(category, byId).map((item) => item.name).join(' → ');
 }
 
 function renderAdminCategoryTable(categories) {
   const { byId } = categoryMaps(categories);
 
   return renderAdminTable({
-    columns: [{ label: 'ID' }, { label: 'Название' }, { label: 'Родительская категория' }, { label: 'Действия' }],
+    columns: [{ label: 'Название' }, { label: 'Путь' }, { label: 'ID' }, { label: 'Действия' }],
     rows: sortedCategories(categories),
     emptyState: emptyState('Категорий пока нет'),
     tableClass: 'admin-brand-table admin-category-table',
     rowClass: 'admin-brand-table-row admin-category-table-row',
     getRowAttributes: (category) => ` data-category-row data-category-id="${category.id}" data-category-name="${escapeHtml(category.name.toLowerCase())}"`,
     renderCells: (category) => `
-      <span class="mono">${category.id}</span>
       <strong>${escapeHtml(category.name)}</strong>
-      <span class="subtle">${escapeHtml(parentName(category, byId))}</span>
+      <span class="subtle">${escapeHtml(categoryFullPath(category, byId))}</span>
+      <span class="mono">${category.id}</span>
       <span class="admin-table-actions">
         ${renderIconButton({
           type: 'edit',
@@ -252,6 +244,7 @@ function showEditPanel(category) {
   form.elements.id.value = category.id;
   form.elements.name.value = category.name;
   form.elements.parent_id.value = category.parent_id ?? '';
+  form.elements.parent_id.dispatchEvent(new Event('change', { bubbles: true }));
   form.elements.name.focus();
 }
 
@@ -334,7 +327,7 @@ export async function renderAdminCategoriesPage() {
           <h2>Создание</h2>
           <div class="admin-category-create-row">
             <label>Название <input name="name" required minlength="2" /></label>
-            <label>Родительская категория <select name="parent_id">${renderParentOptions(categories)}</select></label>
+            ${renderCategoryPicker({ id: 'categoryCreateParent', label: 'Родительская категория', categories })}
             <button class="button primary" type="submit">Создать</button>
           </div>
         </form>
@@ -355,7 +348,7 @@ export async function renderAdminCategoriesPage() {
         <form class="admin-category-edit-row" data-form="category-update">
           <label>ID <input name="id" required readonly type="number" min="1" /></label>
           <label>Название <input name="name" required minlength="2" /></label>
-          <label>Родительская категория <select name="parent_id">${renderParentOptions(categories)}</select></label>
+          ${renderCategoryPicker({ id: 'categoryUpdateParent', label: 'Родительская категория', categories })}
           <div class="actions">
             <button class="button primary" type="submit">Сохранить</button>
             <button class="button" data-action="category-edit-cancel" type="button">Отмена</button>
@@ -375,5 +368,5 @@ export async function renderAdminCategoriesPage() {
 
   bindCategoryCrud(paint, categories);
   bindAdminCategorySearch();
+  bindCategoryPickers(categories);
 }
-
